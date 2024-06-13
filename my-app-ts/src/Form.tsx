@@ -4,6 +4,8 @@ type FormProps = {
   onSubmit: (name: string, age: string) => void;
 };
 
+//テスト
+
 const Form = (props: FormProps) => {
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
