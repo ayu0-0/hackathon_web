@@ -1,0 +1,125 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+
+
+.App-header {
+  background-color: #282c34;
+  min-height: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  position: relative;
+}
+
+.App-header p {
+  margin: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.App-header button {
+  position: absolute;
+  right: 10px;
+}
+
+.post-button {
+  position: absolute;
+  bottom: 50px;
+  right: 10px;
+}
+
+
+
+.App-link {
+  color: #61dafb;
+}
+.post-button {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background-color: white;
+  width: 150px; /* ボタンの幅を設定 */
+  height: 50px; /* ボタンの高さを設定 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: black;
+  z-index: 1000; /* Ensure it's above other elements */
+}
+
+.back-button {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  background-color: white;
+  width: 150px; /* ボタンの幅を設定 */
+  height: 50px; /* ボタンの高さを設定 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: black;
+  z-index: 1000; /* Ensure it's above other elements */
+}
+
+.userName {
+  font-size: 1.2em; /* フォントサイズを1.5倍に設定 */
+  margin-bottom: 8px;
+}
+.userId {
+  font-size: 0.8em;
+  color: gray;
+}
+
+.content {
+  margin-bottom: 8px;
+}
+
+.postedAt{
+  font-size: 0.8em;
+  margin-bottom: 8px;
+}
+
+.postContainer {
+  border: 1px solid #015f34; /* 四角のボーダーを設定 */
+  padding: 10px;          /* コンテンツ周囲のパディングを設定 */
+  margin-bottom: 10px;    /* 投稿間のスペースを設定 */
+  border-radius: 5px;     /* 角を丸める（任意） */
+}
+.likeButton {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.likeButton img {
+  width: 24px;  /* 画像の幅を24pxに設定 */
+  height: 24px;  /* 画像の高さを24pxに設定 */
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
