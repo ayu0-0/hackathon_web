@@ -39,7 +39,7 @@ export const LoginForm: React.FC = () => {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassroed] = useState("");
+  const [password, setPassword] = useState("");
 
   return (
     <div>
@@ -76,6 +76,7 @@ export const Form: React.FC<FormPropsFour> = (props: FormPropsFour) => {
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     props.onSubmitFour(email, password, name, userid);
+    //window.location.href = "/dashboard";
   };
 
 
@@ -110,7 +111,8 @@ export const Form: React.FC<FormPropsFour> = (props: FormPropsFour) => {
         onChange={(e) => setUserid(e.target.value)}
       ></input>
       
-      <button type={"submit"}>新規登録</button>
+        <button type={"submit"}>新規登録</button>
+
     </form>
   );
 };

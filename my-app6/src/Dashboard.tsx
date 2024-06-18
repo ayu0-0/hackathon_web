@@ -26,11 +26,19 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [posts, setPosts] = useState<Posts[]>([]);
   const [likedPosts, setLikedPosts] = useState<Set<number>>(new Set());
+  const [userUid, setUserUid] = useState<string | null>(null);
 
   useEffect(() => {
     const unsubscribe = fireAuth.onAuthStateChanged(user => {
       setLoginUser(user);
+      if (user) {
+        setUserUid(user.uid); // ログインユーザーのUIDをステートに設定
+      } else {
+        setUserUid(null);
+      }
     });
+
+
 
     const fetchUsers = async () => {
       try {
@@ -103,7 +111,7 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
   };
 
   const filteredAndSortedPosts = posts
-    .filter(post => post.user_id === "00000000000000000000000001")
+    .filter(post => post.user_id === userUid)
     .sort((a, b) => b.created_at.getTime() - a.created_at.getTime()); // 時系列順にソート
 
   return (

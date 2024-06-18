@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import { PostForm } from './components/LoginForm'; // インポートパスが正しいことを確認してください
 import { useNavigate } from 'react-router-dom';
 import { StringifyOptions } from 'querystring';
+import { fireAuth, register, login, signOutWithMail } from './firebaseAuth';
 
 interface User {
   id: string;
@@ -21,12 +22,29 @@ interface Post {
 const PostPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [posts, setPosts] = useState<Post[]>([]);
+  const [userUid, setUserUid] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+
+    const unsubscribe = fireAuth.onAuthStateChanged(user => { // !
+      if (user) {
+        setUserUid(user.uid); // ログインユーザーのUIDをステートに設定
+      } else {
+        setUserUid(null);
+      }
+    });
+
+    
+
+
+    return () => unsubscribe();
+  }, []);
   
 
 
   const handleSubmit = async (content: string) => {
-    const user_id = "00000000000000000000000001";
+    const user_id = userUid;
     
     if (content.length > 150) {
       alert("150文字以内の投稿を入力してください");
