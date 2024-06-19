@@ -13,17 +13,22 @@ interface User {
   userid: string;
 }
 
-interface Posts {
+interface Post {
   id: string;
   user_id: string;
   content: string;
   created_at: Date;
 }
 
+interface Like {
+  user_id: string;
+  post_id: string;
+}
+
 const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
   const [loginUser, setLoginUser] = useState(fireAuth.currentUser);
   const [users, setUsers] = useState<User[]>([]);
-  const [posts, setPosts] = useState<Posts[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
   const [userUid, setUserUid] = useState<string | null>(null);
   const [viewAllPosts, setViewAllPosts] = useState(false);
@@ -62,7 +67,7 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
           },
         });
         const data = await response.json();
-        const postsWithDate = data.map((post: Posts) => ({
+        const postsWithDate = data.map((post: Post) => ({
           ...post,
           created_at: new Date(post.created_at)
         }));
@@ -72,13 +77,38 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
       }
     };
 
+    const fetchLikes = async () => { // likesデータを別途取得
+      try {
+        const response = await fetch("http://localhost:8000/likes", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await response.json();
+        const likedPostIds = data.filter((like: Like) => like.user_id === userUid).map((like: Like) => like.post_id);
+        setLikedPosts(new Set(likedPostIds));
+        console.log("setLikedPosts");
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
     fetchPosts();
     fetchUsers();
+    if (userUid) {
+      fetchLikes(); // 変更: userUidが存在する場合のみfetchLikesを呼び出す
+    }
 
     return () => unsubscribe();
-  }, []);
+
+  }, [userUid]);
+
+
 
   const navigate = useNavigate();
+
+
 
   const handlePostButtonClick = (e: any) => {
     e.preventDefault();
@@ -89,9 +119,9 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
     setLikedPosts(prevLikedPosts => {
       const newLikedPosts = new Set(prevLikedPosts);
       if (newLikedPosts.has(postId)) {
-        newLikedPosts.delete(postId);
+        newLikedPosts.delete(postId); // 変更: likeを削除する際はpostIdを削除
       } else {
-        newLikedPosts.add(postId);
+        newLikedPosts.add(postId); // 変更: likeを追加する際はpostIdを追加
       }
       return newLikedPosts;
     });
@@ -122,7 +152,7 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
         throw new Error('データの取得に失敗しました');
       }
       const getData = await getResponse.json();
-      const postsWithDate = getData.map((post: Posts) => ({
+      const postsWithDate = getData.map((post: Post) => ({
         ...post,
         created_at: new Date(post.created_at)
       }));
@@ -140,6 +170,13 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
   const filteredAndSortedPosts = posts
     .filter(post => viewAllPosts || post.user_id === userUid)
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+  const isLikedByCurrentUser = (postId: string) => {
+    if (!userUid) return false;
+    return likedPosts.has(postId);
+
+  };
+
 
   return (
     <div>
@@ -161,7 +198,7 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                 <div className='postedAt'>{filteredPost.created_at.toLocaleString()}</div>
                 <button className="likeButton" onClick={() => handleLikeClick(filteredPost.id)}>
                   <img
-                    src={likedPosts.has(filteredPost.id) ? likedImage : likeImage}
+                    src={isLikedByCurrentUser(filteredPost.id) ? likedImage : likeImage}
                     alt="Like"
                     className="likeImage"
                   />
