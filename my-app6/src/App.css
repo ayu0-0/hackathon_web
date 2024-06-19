@@ -21,7 +21,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(100px + 2vmin);
   color: white;
   position: relative;
 }
@@ -33,10 +33,54 @@
   transform: translateX(-50%);
 }
 
+
 .App-header button {
   position: absolute;
   right: 10px;
 }
+
+.App-header .to-friends-posts-button {
+  position: absolute;
+  left: 20%;
+  right: 60%;
+  color: white;
+  border: 2px transparent;
+  font-size: 35px;
+  white-space: nowrap;
+  background-color: transparent;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.App-header .to-friends-posts-button:hover {
+  background-color: white;
+  /* ホバー時に背景色を薄くする */
+  color: #282c34;
+  /* ホバー時にテキストの色を変更 */
+}
+
+
+.App-header .to-my-posts-button {
+  position: absolute;
+  left: 60%;
+  right: 20%;
+  color: white;
+  border: 2px transparent;
+  font-size: 35px;
+  white-space: nowrap;
+  background-color: transparent;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* ホバー効果のためのトランジション */
+
+
+.App-header .to-my-posts-button:hover {
+  background-color: white;
+  /* ホバー時に背景色を薄くする */
+  color: #282c34;
+  /* ホバー時にテキストの色を変更 */
+}
+
 
 .post-button {
   position: absolute;
@@ -49,19 +93,23 @@
 .App-link {
   color: #61dafb;
 }
+
 .post-button {
   position: fixed;
   bottom: 10px;
   right: 10px;
   background-color: white;
-  width: 150px; /* ボタンの幅を設定 */
-  height: 50px; /* ボタンの高さを設定 */
+  width: 150px;
+  /* ボタンの幅を設定 */
+  height: 50px;
+  /* ボタンの高さを設定 */
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: black;
-  z-index: 1000; /* Ensure it's above other elements */
+  z-index: 1000;
+  /* Ensure it's above other elements */
 }
 
 .back-button {
@@ -69,20 +117,25 @@
   bottom: 10px;
   left: 10px;
   background-color: white;
-  width: 150px; /* ボタンの幅を設定 */
-  height: 50px; /* ボタンの高さを設定 */
+  width: 150px;
+  /* ボタンの幅を設定 */
+  height: 50px;
+  /* ボタンの高さを設定 */
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: black;
-  z-index: 1000; /* Ensure it's above other elements */
+  z-index: 1000;
+  /* Ensure it's above other elements */
 }
 
 .userName {
-  font-size: 1.2em; /* フォントサイズを1.5倍に設定 */
+  font-size: 1.2em;
+  /* フォントサイズを1.5倍に設定 */
   margin-bottom: 8px;
 }
+
 .userId {
   font-size: 0.8em;
   color: gray;
@@ -92,17 +145,22 @@
   margin-bottom: 8px;
 }
 
-.postedAt{
+.postedAt {
   font-size: 0.8em;
   margin-bottom: 8px;
 }
 
 .postContainer {
-  border: 1px solid #015f34; /* 四角のボーダーを設定 */
-  padding: 10px;          /* コンテンツ周囲のパディングを設定 */
-  margin-bottom: 10px;    /* 投稿間のスペースを設定 */
-  border-radius: 5px;     /* 角を丸める（任意） */
+  border: 1px solid #015f34;
+  /* 四角のボーダーを設定 */
+  padding: 10px;
+  /* コンテンツ周囲のパディングを設定 */
+  margin-bottom: 10px;
+  /* 投稿間のスペースを設定 */
+  border-radius: 5px;
+  /* 角を丸める（任意） */
 }
+
 .likeButton {
   background: none;
   border: none;
@@ -111,14 +169,17 @@
 }
 
 .likeButton img {
-  width: 24px;  /* 画像の幅を24pxに設定 */
-  height: 24px;  /* 画像の高さを24pxに設定 */
+  width: 24px;
+  /* 画像の幅を24pxに設定 */
+  height: 24px;
+  /* 画像の高さを24pxに設定 */
 }
 
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
