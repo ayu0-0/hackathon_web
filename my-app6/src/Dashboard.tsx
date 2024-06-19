@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { fireAuth } from './firebaseAuth';
 import likeImage from './images/like.png';
 import likedImage from './images/liked.png';
+import commentImage from './images/comment.png';
 
 interface User {
   id: string;
@@ -32,6 +33,8 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
   const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
   const [userUid, setUserUid] = useState<string | null>(null);
   const [viewAllPosts, setViewAllPosts] = useState(false);
+  const [showCommentForm, setShowCommentForm] = useState<string | null>(null);
+  const [comment, setComment] = useState("");
 
   useEffect(() => {
     const unsubscribe = fireAuth.onAuthStateChanged(user => {
@@ -150,6 +153,23 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
     fetchLike(postId);
   };
 
+  const handleCommentClick = (postId: string) => {
+    setShowCommentForm(prevState => (prevState === postId ? null : postId)); // フォーム表示の切り替え
+  };
+
+
+  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setComment(e.target.value);
+  };
+
+  const handleCommentSubmit = (e: React.FormEvent<HTMLFormElement>, postId: string) => {
+    e.preventDefault();
+    // コメントの送信処理をここに追加
+    console.log(`Comment submitted for post ${postId}:`, comment);
+    setComment("");
+    setShowCommentForm(null);
+  };
+
   const fetchLike = async (postId: string) => {
     try {
       const postResponse = await fetch("http://localhost:8000/likes", {
@@ -224,6 +244,21 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                     className="likeImage"
                   />
                 </button>
+                <button className="commentButton" onClick={() => handleCommentClick(filteredPost.id)}>
+                  <img src={commentImage} alt="Comment" />
+                </button>
+                {showCommentForm === filteredPost.id && (
+                  <form onSubmit={(e) => handleCommentSubmit(e, filteredPost.id)}>
+                    <textarea
+                      className="commentTextarea"
+                      value={comment}
+                      onChange={handleCommentChange}
+                      placeholder="投稿に返信する"
+                    />
+                    <button type="submit">返信</button>
+                  </form>
+                )}
+
               </div>
             </li>
           ))}

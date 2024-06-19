@@ -166,6 +166,7 @@
   border: none;
   padding: 0;
   cursor: pointer;
+  margin-right: 10px;
 }
 
 .likeButton img {
@@ -174,6 +175,25 @@
   height: 24px;
   /* 画像の高さを24pxに設定 */
 }
+
+.commentButton {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.commentButton img{
+  width: 24px;
+  height: 24px;
+}
+
+.commentTextarea {
+  width: 100%; /* テキストエリアの幅を指定 */
+  height: 100px; /* テキストエリアの高さを指定 */
+  resize: none; /* ユーザーがテキストエリアのサイズを変更できないようにする */
+}
+
 
 @keyframes App-logo-spin {
   from {
