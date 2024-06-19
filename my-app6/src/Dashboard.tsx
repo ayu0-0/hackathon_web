@@ -85,10 +85,31 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
             "Content-Type": "application/json",
           },
         });
-        const data = await response.json();
-        const likedPostIds = data.filter((like: Like) => like.user_id === userUid).map((like: Like) => like.post_id);
-        setLikedPosts(new Set(likedPostIds));
-        console.log("setLikedPosts");
+        const data: Like[] = await response.json();
+
+        const likeCountMap: { [key: string]: number } = {};
+
+        // 各likeデータの出現回数をカウント
+        data.forEach((like) => {
+          const key = `${like.user_id}_${like.post_id}`;
+          if (!likeCountMap[key]) {
+            likeCountMap[key] = 0;
+          }
+          likeCountMap[key]++;
+        });
+
+        const likedPostIds = new Set<string>();
+        Object.keys(likeCountMap).forEach((key) => {
+          if (likeCountMap[key] % 2 === 1) { // 奇数回
+            const [user_id, post_id] = key.split("_");
+            if (user_id === userUid) {
+              likedPostIds.add(post_id);
+            }
+          }
+        });
+
+        setLikedPosts(likedPostIds);
+
       } catch (err) {
         console.error(err);
       }
@@ -97,7 +118,7 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
     fetchPosts();
     fetchUsers();
     if (userUid) {
-      fetchLikes(); // 変更: userUidが存在する場合のみfetchLikesを呼び出す
+      fetchLikes();
     }
 
     return () => unsubscribe();
@@ -119,9 +140,9 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
     setLikedPosts(prevLikedPosts => {
       const newLikedPosts = new Set(prevLikedPosts);
       if (newLikedPosts.has(postId)) {
-        newLikedPosts.delete(postId); // 変更: likeを削除する際はpostIdを削除
+        newLikedPosts.delete(postId);
       } else {
-        newLikedPosts.add(postId); // 変更: likeを追加する際はpostIdを追加
+        newLikedPosts.add(postId);
       }
       return newLikedPosts;
     });
