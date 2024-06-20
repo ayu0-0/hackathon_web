@@ -39,9 +39,12 @@ export const login = async (email: string, password: string) => {
     if (error instanceof Error) {
       alert(error.message);
       console.error(error);
+      console.error("エラーが起きました");
+      throw new Error("error occurred.");
     } else {
       alert("An unknown error occurred.");
       console.error(error);
+      throw new Error("An unknown error occurred.");
     }
   }
 };

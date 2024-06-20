@@ -8,7 +8,7 @@ import PostPage from './PostPage';
 import ReplyPage from './ReplyPage';
 import ReplyReplyPage2 from "./ReplyReplyPage2";
 import Status from "./Status";
-
+import ProtectedRoute from './ProtectedRoute';
 
 interface User {
   id: string;
@@ -40,13 +40,13 @@ const App = () => {
       }
     });
 
-    
+
 
 
     return () => unsubscribe();
   }, []);
 
-  
+
 
   const handleFormSubmit = async (email: string, password: string, name: string, userid: string) => {
     try {
@@ -90,10 +90,16 @@ const App = () => {
     window.location.href = "/dashboard";
   };
 
-  const handleFormLogin = (email: string, password: string) => {
-    login(email, password).then(() => {
-      navigate('/dashboard');
-    });
+  const handleFormLogin = async (email: string, password: string) => {
+    try {
+      await login(email, password);
+      console.log("ログイン成功");
+      navigate('/dashboard'); // ログイン成功時にのみページ遷移
+    } catch (error) {
+      console.error("ログインエラー:", error);
+      alert("ログインに失敗しました。再度お試しください。");
+      // ページ遷移を行わない
+    }
   };
 
   const handleSignOut = () => {
@@ -112,20 +118,55 @@ const App = () => {
                 ログイン中
                 <div>UID: {userUid}</div> {/* UIDを表示 */}
               </div>
-            ) : 
+            ) :
               <div>
                 ログインできていません
               </div>}
-              <button onClick={handleSignOut}>
-          ログアウト
-        </button>
+            <button onClick={handleSignOut}>
+              ログアウト
+            </button>
           </>
         } />
-        <Route path="/dashboard" element={<Contents signOut={handleSignOut} />} />
-        <Route path="/post" element={<PostPage />} />
-        <Route path="/reply/:id" element={<ReplyPage />} />
-        <Route path="/replyreply2/:id" element={<ReplyReplyPage2 />} />
-        <Route path="/status/:id" element={<Status signOut={handleSignOut}/>} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Contents signOut={() => fireAuth.signOut()} />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/post"
+          element={
+            <ProtectedRoute>
+              <PostPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reply/:id"
+          element={
+            <ProtectedRoute>
+              <ReplyPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/replyreply2/:id"
+          element={
+            <ProtectedRoute>
+              <ReplyReplyPage2 />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/status/:id"
+          element={
+            <ProtectedRoute>
+              <Status signOut={handleSignOut} />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );
