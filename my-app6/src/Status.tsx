@@ -67,7 +67,7 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
         const fetchUsers = async () => {
             try {
-                const response = await fetch("http://localhost:8000/users", {
+                const response = await fetch("http://localhost:8080/users", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -83,7 +83,7 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
         const fetchReplies = async () => {
             try {
-                const response = await fetch("http://localhost:8000/replies", {
+                const response = await fetch("http://localhost:8080/replies", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -92,7 +92,7 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                 const data = await response.json();
                 setReplies(data);
 
-                const repliesResponse = await fetch("http://localhost:8000/replies", {
+                const repliesResponse = await fetch("http://localhost:8080/replies", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -122,7 +122,7 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
         const fetchPosts = async () => {
             try {
-                const response = await fetch("http://localhost:8000/posts", {
+                const response = await fetch("http://localhost:8080/posts", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -131,7 +131,7 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                 const data = await response.json();
 
                 // 投稿の返信数を取得
-                const repliesResponse = await fetch("http://localhost:8000/replies", {
+                const repliesResponse = await fetch("http://localhost:8080/replies", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -161,7 +161,7 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
         const fetchLikes = async () => { // likesデータを別途取得
             try {
-                const response = await fetch("http://localhost:8000/likes", {
+                const response = await fetch("http://localhost:8080/likes", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -247,7 +247,7 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
         const fetchData = async () => {
             try {
-                const replyResponse = await fetch("http://localhost:8000/replies", {
+                const replyResponse = await fetch("http://localhost:8080/replies", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -263,7 +263,7 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
             }
 
             try {
-                const getResponse = await fetch("http://localhost:8000/posts");
+                const getResponse = await fetch("http://localhost:8080/posts");
                 if (!getResponse.ok) {
                     throw new Error('データの取得に失敗しました');
                 }
@@ -287,7 +287,7 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
     const fetchLike = async (postId: string) => {
         try {
-            const postResponse = await fetch("http://localhost:8000/likes", {
+            const postResponse = await fetch("http://localhost:8080/likes", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -303,7 +303,7 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
         }
 
         try {
-            const getResponse = await fetch("http://localhost:8000/posts");
+            const getResponse = await fetch("http://localhost:8080/posts");
             if (!getResponse.ok) {
                 throw new Error('データの取得に失敗しました');
             }
@@ -319,7 +319,7 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
         const fetchPosts = async () => {
             try {
-                const response = await fetch("http://localhost:8000/posts", {
+                const response = await fetch("http://localhost:8080/posts", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -328,7 +328,7 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                 const data = await response.json();
 
                 // 投稿の返信数を取得
-                const repliesResponse = await fetch("http://localhost:8000/replies", {
+                const repliesResponse = await fetch("http://localhost:8080/replies", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",

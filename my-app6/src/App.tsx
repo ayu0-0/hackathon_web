@@ -61,7 +61,7 @@ const App = () => {
         console.log(currentUser.uid);
 
         try {
-          const postResponse = await fetch("http://localhost:8000/users", {
+          const postResponse = await fetch("http://localhost:8080/users", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -73,7 +73,7 @@ const App = () => {
           }
           console.log("POSTしました");
 
-          const getResponse = await fetch("http://localhost:8000/users");
+          const getResponse = await fetch("http://localhost:8080/users");
           if (!getResponse.ok) {
             throw new Error('データの取得に失敗しました');
           }

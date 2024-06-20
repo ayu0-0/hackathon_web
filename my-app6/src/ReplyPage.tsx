@@ -73,7 +73,7 @@ const ReplyPage = () => {
 
         const fetchUsers = async () => {
             try {
-                const response = await fetch("http://localhost:8000/users", {
+                const response = await fetch("http://localhost:8080/users", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -88,7 +88,7 @@ const ReplyPage = () => {
 
         const fetchPosts = async () => {
             try {
-                const response = await fetch("http://localhost:8000/posts", {
+                const response = await fetch("http://localhost:8080/posts", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -118,7 +118,7 @@ const ReplyPage = () => {
 
         const fetchReplies = async () => {
             try {
-                const response = await fetch("http://localhost:8000/replies", {
+                const response = await fetch("http://localhost:8080/replies", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -147,7 +147,7 @@ const ReplyPage = () => {
 
         const fetchLikes = async () => {
             try {
-                const response = await fetch("http://localhost:8000/likes", {
+                const response = await fetch("http://localhost:8080/likes", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -193,7 +193,7 @@ const ReplyPage = () => {
 
     const fetchLike = async (postId: string) => {
         try {
-            const postResponse = await fetch("http://localhost:8000/likes", {
+            const postResponse = await fetch("http://localhost:8080/likes", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -252,7 +252,7 @@ const ReplyPage = () => {
 
         const fetchReplies = async () => {
             try {
-                const response = await fetch("http://localhost:8000/replies", {
+                const response = await fetch("http://localhost:8080/replies", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -270,7 +270,7 @@ const ReplyPage = () => {
 
 
             try {
-                const replyResponse = await fetch("http://localhost:8000/replies", {
+                const replyResponse = await fetch("http://localhost:8080/replies", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -287,7 +287,7 @@ const ReplyPage = () => {
             }
 
             try {
-                const getResponse = await fetch("http://localhost:8000/posts");
+                const getResponse = await fetch("http://localhost:8080/posts");
                 if (!getResponse.ok) {
                     throw new Error('データの取得に失敗しました');
                 }
