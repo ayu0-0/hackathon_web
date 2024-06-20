@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-route
 import { fireAuth, register, login, signOutWithMail } from './firebaseAuth';
 import Contents from './Dashboard';
 import PostPage from './PostPage';
+import ReplyPage from './ReplyPage';
+import ReplyReplyPage2 from "./ReplyReplyPage2";
 
 
 interface User {
@@ -120,6 +122,8 @@ const App = () => {
         } />
         <Route path="/dashboard" element={<Contents signOut={handleSignOut} />} />
         <Route path="/post" element={<PostPage />} />
+        <Route path="/reply/:id" element={<ReplyPage />} />
+        <Route path="/replyreply2/:id" element={<ReplyReplyPage2 />} />
       </Routes>
     </>
   );

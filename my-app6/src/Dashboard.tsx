@@ -19,6 +19,7 @@ interface Post {
   user_id: string;
   content: string;
   created_at: Date;
+  replyCount?: number;
 }
 
 interface Like {
@@ -70,10 +71,30 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
           },
         });
         const data = await response.json();
+
+        // 投稿の返信数を取得
+        const repliesResponse = await fetch("http://localhost:8000/replies", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const repliesData = await repliesResponse.json();
+
+        const replyCountMap: { [key: string]: number } = {};
+        repliesData.forEach((reply: { post_id: string }) => {
+          if (!replyCountMap[reply.post_id]) {
+            replyCountMap[reply.post_id] = 0;
+          }
+          replyCountMap[reply.post_id]++;
+        });
+
         const postsWithDate = data.map((post: Post) => ({
           ...post,
-          created_at: new Date(post.created_at)
+          created_at: new Date(post.created_at),
+          replyCount: replyCountMap[post.id] || 0,
         }));
+
         setPosts(postsWithDate);
       } catch (err) {
         console.error(err);
@@ -118,6 +139,9 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
       }
     };
 
+
+
+
     fetchPosts();
     fetchUsers();
     if (userUid) {
@@ -128,11 +152,7 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
   }, [userUid]);
 
-
-
   const navigate = useNavigate();
-
-
 
   const handlePostButtonClick = (e: any) => {
     e.preventDefault();
@@ -165,6 +185,39 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
   const handleCommentSubmit = (e: React.FormEvent<HTMLFormElement>, postId: string) => {
     e.preventDefault();
     // コメントの送信処理をここに追加
+
+    const fetchData = async () => {
+      try {
+        const replyResponse = await fetch("http://localhost:8000/replies", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ post_id: postId, user_id: userUid, content: comment }),
+        });
+        if (!replyResponse.ok) {
+          throw new Error('データの送信に失敗しました');
+        }
+      } catch (err) {
+        console.error(err);
+        return;
+      }
+
+      try {
+        const getResponse = await fetch("http://localhost:8000/posts");
+        if (!getResponse.ok) {
+          throw new Error('データの取得に失敗しました');
+        }
+        const getData = await getResponse.json();
+        //console.log(user_id)
+        setPosts(getData);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchData();
+
     console.log(`Comment submitted for post ${postId}:`, comment);
     setComment("");
     setShowCommentForm(null);
@@ -230,36 +283,65 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
         <ul className="list" style={{ listStyleType: 'none', padding: 0 }}>
           {filteredAndSortedPosts.map(filteredPost => (
             <li key={filteredPost.id} className="listItem">
-              <div className="postContainer">
-                <div className="userName">
-                  {getUserName(filteredPost.user_id).name}
-                  <span className="userId"> @{getUserName(filteredPost.user_id).userid}</span>
-                </div>
-                <div className="content">{filteredPost.content}</div>
-                <div className='postedAt'>{filteredPost.created_at.toLocaleString()}</div>
-                <button className="likeButton" onClick={() => handleLikeClick(filteredPost.id)}>
-                  <img
-                    src={isLikedByCurrentUser(filteredPost.id) ? likedImage : likeImage}
-                    alt="Like"
-                    className="likeImage"
-                  />
-                </button>
-                <button className="commentButton" onClick={() => handleCommentClick(filteredPost.id)}>
-                  <img src={commentImage} alt="Comment" />
-                </button>
-                {showCommentForm === filteredPost.id && (
-                  <form onSubmit={(e) => handleCommentSubmit(e, filteredPost.id)}>
-                    <textarea
-                      className="commentTextarea"
-                      value={comment}
-                      onChange={handleCommentChange}
-                      placeholder="投稿に返信する"
-                    />
-                    <button type="submit">返信</button>
-                  </form>
-                )}
+              <a href={`/reply/${filteredPost.id}`} className="postLink">
+                <div className="postContainer">
+                  <div className="userName">
+                    {getUserName(filteredPost.user_id).name}
+                    <span className="userId"> @{getUserName(filteredPost.user_id).userid}</span>
+                  </div>
+                  <div className="content">{filteredPost.content}</div>
+                  <div className='postedAt'>{filteredPost.created_at.toLocaleString()}</div>
+                  <div className="commentContainer">
+                    <button className="likeButton" onClick={(e) => {
+                      e.preventDefault(); // リンクのデフォルト動作を防止
+                      e.stopPropagation(); // イベントの伝播を停止
+                      handleLikeClick(filteredPost.id);
+                    }}>
+                      <img
+                        src={isLikedByCurrentUser(filteredPost.id) ? likedImage : likeImage}
+                        alt="Like"
+                        className="likeImage"
+                      />
+                    </button>
 
-              </div>
+                    <button className="commentButton" onClick={(e) => {
+                      e.preventDefault(); // リンクのデフォルト動作を防止
+                      e.stopPropagation(); // イベントの伝播を停止
+                      handleCommentClick(filteredPost.id);
+                    }}>
+                      <img src={commentImage} alt="Comment" className="commentImage" />
+                    </button>
+                    <div className="commentText">{filteredPost.replyCount}</div>
+                  </div>
+                  {showCommentForm === filteredPost.id && (
+                    <form
+                      onSubmit={(e) => handleCommentSubmit(e, filteredPost.id)}
+                      onClick={(e) => {
+                        // リンクのデフォルト動作を防止
+                        e.stopPropagation(); // イベントの伝播を停止
+                      }}
+                    >
+                      <textarea
+                        className="commentTextarea"
+                        value={comment}
+                        onChange={handleCommentChange}
+                        placeholder="投稿に返信する"
+                        onClick={(e) => {
+                          e.preventDefault(); // リンクのデフォルト動作を防止
+                          e.stopPropagation(); // イベントの伝播を停止
+                        }}
+                      />
+                      <button type="submit">
+                        返信
+                      </button>
+                    </form>
+
+                  )}
+
+
+
+                </div>
+              </a>
             </li>
           ))}
         </ul>

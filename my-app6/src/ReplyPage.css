@@ -1,0 +1,83 @@
+.username {
+    font-size: 30px;
+    margin-right: 10px;
+}
+
+.userid {
+    font-size: 20px;
+    color: gray;
+}
+
+
+
+.user-info {
+    display: flex;
+    align-items: center;
+
+}
+
+.postcontent {
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+
+.post-created-at {
+    font-size: 20px;
+    margin-bottom: 30px;
+    color: rgb(105, 105, 105);
+}
+
+.reply-likeButton {
+
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.reply-likeButton img {
+    width: 40px;
+    height: 40px;
+}
+
+.post-container {
+    margin-left: 50px;
+}
+
+.post-actions {
+    display: flex;
+    align-items: center;
+}
+
+.post-actions img {
+    margin-right: 8px; /* 画像間の余白 */
+}
+
+.commentText {
+    margin-left: 5px; /* 画像とテキスト間の余白 */
+    font-size: 25px;
+    color: gray;
+}
+
+.post-back-button {
+    
+    background-color: white;
+    width: 150px;
+    /* ボタンの幅を設定 */
+    height: 50px;
+    /* ボタンの高さを設定 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: black;
+    /* Ensure it's above other elements */
+  }
+
+.left-image {
+    width: 50px;
+    /* ボタンの幅を設定 */
+    height: 50px;
+    /* ボタンの高さを設定 */
+}

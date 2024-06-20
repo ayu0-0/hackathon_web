@@ -176,11 +176,23 @@
   /* 画像の高さを24pxに設定 */
 }
 
+.commentContainer {
+  display: flex;
+  align-items: center;
+  color: gray
+}
+
 .commentButton {
     background: none;
     border: none;
     padding: 0;
     cursor: pointer;
+    margin-right: 10px;
+   
+}
+
+.commentText {
+  transform: translateY(-2px);
 }
 
 .commentButton img{
@@ -192,6 +204,15 @@
   width: 100%; /* テキストエリアの幅を指定 */
   height: 100px; /* テキストエリアの高さを指定 */
   resize: none; /* ユーザーがテキストエリアのサイズを変更できないようにする */
+}
+
+a.postLink {
+  text-decoration: none;
+  color: inherit; /* テキストの色を継承する */
+}
+
+a.postLink:hover {
+  text-decoration: none; /* ホバー時も下線を表示しない */
 }
 
 
