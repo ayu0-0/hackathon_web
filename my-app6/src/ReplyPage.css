@@ -3,9 +3,23 @@
     margin-right: 10px;
 }
 
+.origin-username {
+    font-size: 30px;
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+
+
 .userid {
     font-size: 20px;
     color: gray;
+}
+
+
+.origin-userid {
+    font-size: 20px;
+    color: gray;
+    margin-bottom: -3px;
 }
 
 
@@ -21,9 +35,20 @@
     margin-bottom: 30px;
 }
 
+.origin-postcontent {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
 .post-created-at {
     font-size: 20px;
     margin-bottom: 30px;
+    color: rgb(105, 105, 105);
+}
+
+.origin-post-created-at {
+    font-size: 18px;
+    margin-bottom: 10px;
     color: rgb(105, 105, 105);
 }
 
@@ -36,10 +61,25 @@
     margin-right: 10px;
 }
 
+.origin-reply-likeButton {
+
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
 .reply-likeButton img {
     width: 40px;
     height: 40px;
 }
+
+.origin-reply-likeButton img {
+    width: 30px;
+    height: 30px;
+}
+
 
 .post-container {
     margin-left: 50px;

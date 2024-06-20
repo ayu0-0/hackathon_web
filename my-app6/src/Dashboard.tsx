@@ -265,10 +265,13 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
         const getData = await getResponse.json();
         //console.log(user_id)
         setPosts(getData);
+        window.location.reload();
       } catch (err) {
         console.error(err);
       }
     };
+
+    
 
     fetchData();
 
@@ -308,6 +311,47 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
     } catch (err) {
       console.error(err);
     }
+
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/posts", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await response.json();
+
+        // 投稿の返信数を取得
+        const repliesResponse = await fetch("http://localhost:8000/replies", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const repliesData = await repliesResponse.json();
+
+        const replyCountMap: { [key: string]: number } = {};
+        repliesData.forEach((reply: { post_id: string }) => {
+          if (!replyCountMap[reply.post_id]) {
+            replyCountMap[reply.post_id] = 0;
+          }
+          replyCountMap[reply.post_id]++;
+        });
+
+        const postsWithDate = data.map((post: Post) => ({
+          ...post,
+          created_at: new Date(post.created_at),
+          replyCount: replyCountMap[post.id] || 0,
+        }));
+
+        setPosts(postsWithDate);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchPosts();
   };
 
   const getUserName = (userId: string) => {
@@ -374,9 +418,6 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                   <div className="content">
                     {item.type === 'replyreply2' && (
                       <>
-                        
-                        
-                      
                         <span>@{getUserName(getPostUserName(item.post_id).user).userid}に返信</span>
                         <br />
                       </>

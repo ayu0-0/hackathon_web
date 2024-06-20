@@ -210,8 +210,28 @@ const ReplyReplyPage2 = () => {
 
     };
 
+    const getUserName = (userId: string) => {
+        const user = users.find(user => user.id === userId);
+        return user ? { name: user.name, userid: user.userid } : { name: "Unknown User", userid: "" };
+    };
+
+
+    const getPost = (postId: string) => {
+        const post = posts.find(post => post.id === postId);
+        const reply = replies.find(reply => reply.id === postId);
+        if (post) {
+            return { user: post.user_id, content: post.content, created_at: post.created_at, type: 'reply' };
+        } else if (reply) {
+            return { user: reply.user_id, content: reply.content, created_at: reply.created_at, type: 'replyreply2' };
+        } else {
+            return { user: "Unknown User", content: "", created_at: new Date(), type: 'unknown' };
+        }
+    };
+
     const filteredAndSortedPosts = posts
         .filter(post => viewAllPosts || post.id === id);
+
+
 
     const filteredAndSortedReplies = replies
         .filter(reply => viewAllReplies || reply.id === id);
@@ -320,6 +340,79 @@ const ReplyReplyPage2 = () => {
                 </a>
             </header>
             {/* idに基づいて内容を変更 */}
+            <div>
+            
+                {filteredAndSortedReplies.map(reply => {
+                    const user = users.find(user => user.id === reply.user_id);
+                    const getRepliesCountForPost = (postId: string) => {
+                        return replies.filter(r => r.post_id === postId).length;
+                    };
+                    const postDetails = getPost(reply.post_id as string);
+                    return (
+                        <a href={`/${postDetails.type}/${reply.post_id}`} className="postLink" key={reply.id}>
+                        <div key={reply.id} className="post">
+                            <div className='user-info'>
+                                <p className='origin-username'>{getUserName(postDetails.user as string).name}</p>
+                                <p className='origin-userid'>@{getUserName(postDetails.user as string).userid}</p>
+                            </div>
+                            <div className='origin-postcontent'>{postDetails.content}</div>
+
+                            <div className='origin-post-created-at'>{postDetails.created_at.toLocaleString()}</div>
+                            <div className="post-actions">
+                                <button className="origin-reply-likeButton" onClick={(e) => {
+                                    e.preventDefault(); // リンクのデフォルト動作を防止
+                                    e.stopPropagation(); // イベントの伝播を停止
+                                    handleLikeClick(reply.post_id);
+                                }}>
+                                    <img
+                                        src={isLikedByCurrentUser(reply.post_id) ? likedImage : likeImage}
+                                        alt="Like"
+                                        className="likeImage"
+                                    />
+                                </button>
+                                <button className="origin-reply-likeButton" onClick={(e) => {
+                                    e.preventDefault(); // リンクのデフォルト動作を防止
+                                    e.stopPropagation(); // イベントの伝播を停止
+                                    handleCommentClick(reply.post_id);
+                                }}>
+                                    <img src={commentImage} alt="Comment" />
+                                </button>
+                                <div className="commentText">{getRepliesCountForPost(reply.post_id)}  </div>
+                            </div>
+                            {showCommentForm === reply.post_id && (
+                                <form
+                                    onSubmit={(e) => handleCommentSubmit(e, reply.post_id)}
+                                    onClick={(e) => {
+                                        // リンクのデフォルト動作を防止
+                                        e.stopPropagation(); // イベントの伝播を停止
+                                    }}
+                                >
+                                    <textarea
+                                        className="commentTextarea"
+                                        value={comment}
+                                        onChange={handleCommentChange}
+                                        placeholder="投稿に返信する"
+                                        onClick={(e) => {
+                                            e.preventDefault(); // リンクのデフォルト動作を防止
+                                            e.stopPropagation(); // イベントの伝播を停止
+                                        }}
+                                    />
+                                    <button type="submit">
+                                        返信
+                                    </button>
+                                </form>
+                               
+                            )}
+
+
+                        </div>
+                        </a>
+                    );
+                })}
+
+
+            </div>
+
             <div>
                 {filteredAndSortedReplies.map(reply => {
                     const user = users.find(user => user.id === reply.user_id);
