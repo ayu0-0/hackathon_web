@@ -20,6 +20,7 @@ interface Post {
   content: string;
   created_at: Date;
   replyCount?: number;
+  post_id: string;
 }
 
 interface Like {
@@ -27,10 +28,22 @@ interface Like {
   post_id: string;
 }
 
+interface Reply {
+  id: string;
+  post_id: string;
+  user_id: string;
+  content: string;
+  created_at: Date;
+  replyCount?: number;
+}
+
+
+
 const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
   const [loginUser, setLoginUser] = useState(fireAuth.currentUser);
   const [users, setUsers] = useState<User[]>([]);
   const [posts, setPosts] = useState<Post[]>([]);
+  const [replies, setReplies] = useState<Reply[]>([]);
   const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
   const [userUid, setUserUid] = useState<string | null>(null);
   const [viewAllPosts, setViewAllPosts] = useState(false);
@@ -57,6 +70,46 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
         });
         const data = await response.json();
         setUsers(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+
+    const fetchReplies = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/replies", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await response.json();
+        setReplies(data);
+
+        const repliesResponse = await fetch("http://localhost:8000/replies", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const repliesData = await repliesResponse.json();
+
+        const replyCountMap: { [key: string]: number } = {};
+        repliesData.forEach((reply: { post_id: string }) => {
+          if (!replyCountMap[reply.post_id]) {
+            replyCountMap[reply.post_id] = 0;
+          }
+          replyCountMap[reply.post_id]++;
+        });
+
+        const repliesWithDate = data.map((reply: Reply) => ({
+          ...reply,
+          created_at: new Date(reply.created_at),
+          replyCount: replyCountMap[reply.id] || 0,
+        }));
+
+        setReplies(repliesWithDate);
       } catch (err) {
         console.error(err);
       }
@@ -147,6 +200,7 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
     if (userUid) {
       fetchLikes();
     }
+    fetchReplies();
 
     return () => unsubscribe();
 
@@ -261,9 +315,37 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
     return user ? { name: user.name, userid: user.userid } : { name: "Unknown User", userid: "" };
   };
 
+  
+
+  const getPostUserName = (postId: string) => {
+    const post = posts.find(post => post.id === postId);
+    const reply = replies.find(reply => reply.id === postId);
+    console.log(post);
+    return post ? { user: post.user_id } : reply ? { user: reply.user_id } : { user: "Unknown User"};
+  };
+
+  
+
   const filteredAndSortedPosts = posts
     .filter(post => viewAllPosts || post.user_id === userUid)
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+    
+
+  const postsWithType = posts.map(post => ({ ...post, type: 'reply' }));
+
+  const repliesWithType = replies
+    .filter(reply => reply.user_id === userUid)
+    .map(reply => ({
+      ...reply,
+      type: 'replyreply2',
+      post_id: reply.post_id  // ここで post_id を追加
+    }));
+
+  const filteredAndSortedPostsAndReplies = [...postsWithType, ...repliesWithType]
+    .filter(item => viewAllPosts || item.user_id === userUid)
+    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
 
   const isLikedByCurrentUser = (postId: string) => {
     if (!userUid) return false;
@@ -281,24 +363,34 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
       </div>
       <div>
         <ul className="list" style={{ listStyleType: 'none', padding: 0 }}>
-          {filteredAndSortedPosts.map(filteredPost => (
-            <li key={filteredPost.id} className="listItem">
-              <a href={`/reply/${filteredPost.id}`} className="postLink">
+          {filteredAndSortedPostsAndReplies.map(item => (
+            <li key={item.id} className="listItem">
+              <a href={`/${item.type}/${item.id}`} className="postLink">
                 <div className="postContainer">
                   <div className="userName">
-                    {getUserName(filteredPost.user_id).name}
-                    <span className="userId"> @{getUserName(filteredPost.user_id).userid}</span>
+                    {getUserName(item.user_id).name}
+                    <span className="userId"> @{getUserName(item.user_id).userid}</span>
                   </div>
-                  <div className="content">{filteredPost.content}</div>
-                  <div className='postedAt'>{filteredPost.created_at.toLocaleString()}</div>
+                  <div className="content">
+                    {item.type === 'replyreply2' && (
+                      <>
+                        
+                        
+                      
+                        <span>@{getUserName(getPostUserName(item.post_id).user).userid}に返信</span>
+                        <br />
+                      </>
+                    )}
+                    {item.content}</div>
+                  <div className='postedAt'>{new Date(item.created_at).toLocaleString()}</div>
                   <div className="commentContainer">
                     <button className="likeButton" onClick={(e) => {
                       e.preventDefault(); // リンクのデフォルト動作を防止
                       e.stopPropagation(); // イベントの伝播を停止
-                      handleLikeClick(filteredPost.id);
+                      handleLikeClick(item.id);
                     }}>
                       <img
-                        src={isLikedByCurrentUser(filteredPost.id) ? likedImage : likeImage}
+                        src={isLikedByCurrentUser(item.id) ? likedImage : likeImage}
                         alt="Like"
                         className="likeImage"
                       />
@@ -307,15 +399,15 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                     <button className="commentButton" onClick={(e) => {
                       e.preventDefault(); // リンクのデフォルト動作を防止
                       e.stopPropagation(); // イベントの伝播を停止
-                      handleCommentClick(filteredPost.id);
+                      handleCommentClick(item.id);
                     }}>
                       <img src={commentImage} alt="Comment" className="commentImage" />
                     </button>
-                    <div className="commentText">{filteredPost.replyCount}</div>
+                    <div className="commentText">{item.replyCount}</div>
                   </div>
-                  {showCommentForm === filteredPost.id && (
+                  {showCommentForm === item.id && (
                     <form
-                      onSubmit={(e) => handleCommentSubmit(e, filteredPost.id)}
+                      onSubmit={(e) => handleCommentSubmit(e, item.id)}
                       onClick={(e) => {
                         // リンクのデフォルト動作を防止
                         e.stopPropagation(); // イベントの伝播を停止
