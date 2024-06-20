@@ -46,7 +46,7 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
   const [replies, setReplies] = useState<Reply[]>([]);
   const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
   const [userUid, setUserUid] = useState<string | null>(null);
-  const [viewAllPosts, setViewAllPosts] = useState(false);
+  const [viewAllPosts, setViewAllPosts] = useState(true);
   const [showCommentForm, setShowCommentForm] = useState<string | null>(null);
   const [comment, setComment] = useState("");
 
@@ -271,7 +271,7 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
       }
     };
 
-    
+
 
     fetchData();
 
@@ -359,27 +359,26 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
     return user ? { name: user.name, userid: user.userid } : { name: "Unknown User", userid: "" };
   };
 
-  
+
 
   const getPostUserName = (postId: string) => {
     const post = posts.find(post => post.id === postId);
     const reply = replies.find(reply => reply.id === postId);
     console.log(post);
-    return post ? { user: post.user_id } : reply ? { user: reply.user_id } : { user: "Unknown User"};
+    return post ? { user: post.user_id } : reply ? { user: reply.user_id } : { user: "Unknown User" };
   };
 
-  
+
 
   const filteredAndSortedPosts = posts
     .filter(post => viewAllPosts || post.user_id === userUid)
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
-    
+
 
   const postsWithType = posts.map(post => ({ ...post, type: 'reply' }));
 
   const repliesWithType = replies
-    .filter(reply => reply.user_id === userUid)
     .map(reply => ({
       ...reply,
       type: 'replyreply2',
@@ -401,8 +400,6 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
   return (
     <div>
       <div className="App-header">
-        <button className="to-my-posts-button" onClick={() => setViewAllPosts(false)}>自分の投稿</button>
-        <button className="to-friends-posts-button" onClick={() => setViewAllPosts(true)}>友達の投稿</button>
         <button onClick={signOut}>ログアウト</button>
       </div>
       <div>
@@ -412,15 +409,25 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
               <a href={`/${item.type}/${item.id}`} className="postLink">
                 <div className="postContainer">
                   <div className="userName">
-                    {getUserName(item.user_id).name}
-                    <span className="userId"> @{getUserName(item.user_id).userid}</span>
+                    <a href={`/status/${item.user_id}`}>
+                      {getUserName(item.user_id).name}
+                      <span className="userId"> @{getUserName(item.user_id).userid}</span>
+                    </a>
                   </div>
                   <div className="content">
                     {item.type === 'replyreply2' && (
-                      <>
-                        <span>@{getUserName(getPostUserName(item.post_id).user).userid}に返信</span>
-                        <br />
-                      </>
+                      <div
+                      className="replyLink"
+                      onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation(); // クリックイベントの伝播を停止
+                          window.location.href = `/status/${getPostUserName(item.post_id).user}`;
+                      }}
+                  >
+                          <span className="blue-text">@{getUserName(getPostUserName(item.post_id).user).userid}</span>
+                          <span className="black-text">に返信</span>
+                          <br />
+                      </div>
                     )}
                     {item.content}</div>
                   <div className='postedAt'>{new Date(item.created_at).toLocaleString()}</div>

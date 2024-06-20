@@ -30,6 +30,14 @@
 
 }
 
+.user-info a {
+    color: inherit;
+    /* 親要素の色を継承 */
+    text-decoration: none;
+    /* 下線を取り除く */
+
+}
+
 .postcontent {
     font-size: 20px;
     margin-bottom: 30px;
@@ -91,17 +99,19 @@
 }
 
 .post-actions img {
-    margin-right: 8px; /* 画像間の余白 */
+    margin-right: 8px;
+    /* 画像間の余白 */
 }
 
 .commentText {
-    margin-left: 5px; /* 画像とテキスト間の余白 */
+    margin-left: 5px;
+    /* 画像とテキスト間の余白 */
     font-size: 25px;
     color: gray;
 }
 
 .post-back-button {
-    
+
     background-color: white;
     width: 150px;
     /* ボタンの幅を設定 */
@@ -113,11 +123,12 @@
     font-size: calc(10px + 2vmin);
     color: black;
     /* Ensure it's above other elements */
-  }
+}
 
 .left-image {
     width: 50px;
     /* ボタンの幅を設定 */
     height: 50px;
     /* ボタンの高さを設定 */
+    margin-right: 50px;
 }

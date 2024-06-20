@@ -352,8 +352,11 @@ const ReplyReplyPage2 = () => {
                         <a href={`/${postDetails.type}/${reply.post_id}`} className="postLink" key={reply.id}>
                         <div key={reply.id} className="post">
                             <div className='user-info'>
+                            <a href={user ? `/status/${postDetails.user}` : '#'}>
                                 <p className='origin-username'>{getUserName(postDetails.user as string).name}</p>
                                 <p className='origin-userid'>@{getUserName(postDetails.user as string).userid}</p>
+
+                                </a>
                             </div>
                             <div className='origin-postcontent'>{postDetails.content}</div>
 
@@ -419,8 +422,10 @@ const ReplyReplyPage2 = () => {
                     return (
                         <div key={reply.id} className="post">
                             <div className='user-info'>
+                            <a href={user ? `/status/${user.id}` : '#'}>
                                 <p className='username'>{user ? user.name : "不明なユーザー"}</p>
                                 <p className='userid'>@{user ? user.userid : "不明なユーザー"}</p>
+                                </a>
                             </div>
                             <div className='postcontent'>{reply.content}</div>
 

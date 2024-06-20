@@ -82,6 +82,21 @@
 }
 
 
+.status-header {
+  background-color: #282c34;
+  min-height: 10vh;
+  display: flex;
+  font-size: 30px;
+  color: white;
+  position: relative;
+
+}
+.status-header button {
+  position: absolute;
+  right: 10px;
+}
+
+
 .post-button {
   position: absolute;
   bottom: 50px;
@@ -134,6 +149,11 @@
   font-size: 1.2em;
   /* フォントサイズを1.5倍に設定 */
   margin-bottom: 8px;
+}
+
+.userName a {
+  color: inherit; /* 親要素の色を継承 */
+  text-decoration: none; /* 下線を取り除く */
 }
 
 .userId {
@@ -213,6 +233,16 @@ a.postLink {
 
 a.postLink:hover {
   text-decoration: none; /* ホバー時も下線を表示しない */
+}
+
+.blue-text {
+  color: rgb(25, 126, 166);
+
+}
+
+.black-text {
+  color: black;
+
 }
 
 

@@ -7,6 +7,7 @@ import Contents from './Dashboard';
 import PostPage from './PostPage';
 import ReplyPage from './ReplyPage';
 import ReplyReplyPage2 from "./ReplyReplyPage2";
+import Status from "./Status";
 
 
 interface User {
@@ -124,6 +125,7 @@ const App = () => {
         <Route path="/post" element={<PostPage />} />
         <Route path="/reply/:id" element={<ReplyPage />} />
         <Route path="/replyreply2/:id" element={<ReplyReplyPage2 />} />
+        <Route path="/status/:id" element={<Status signOut={handleSignOut}/>} />
       </Routes>
     </>
   );

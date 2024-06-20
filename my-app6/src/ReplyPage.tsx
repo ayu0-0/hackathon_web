@@ -323,8 +323,10 @@ const ReplyPage = () => {
                     return (
                         <div key={post.id} className="post">
                             <div className='user-info'>
-                                <p className='username'>{user ? user.name : "不明なユーザー"}</p>
-                                <p className='userid'>@{user ? user.userid : "不明なユーザー"}</p>
+                                <a href={user ? `/status/${user.id}` : '#'}>
+                                    <p className='username'>{user ? user.name : "不明なユーザー"}</p>
+                                    <p className='userid'>@{user ? user.userid : "不明なユーザー"}</p>
+                                </a>
                             </div>
                             <div className='postcontent'>{post.content}</div>
 
@@ -390,8 +392,10 @@ const ReplyPage = () => {
                                 <a href={`/replyreply2/${reply.id}`} className="postLink">
 
                                     <div className='user-info'>
+                                    <a href={user ? `/status/${user.id}` : '#'}>
                                         <p className='username'>{user ? user.name : "不明なユーザー"}</p>
                                         <p className='userid'>@{user ? user.userid : "不明なユーザー"}</p>
+                                        </a>
                                     </div>
                                     <div className='postcontent'>{reply.content}</div>
 
