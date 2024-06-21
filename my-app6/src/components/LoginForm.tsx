@@ -76,47 +76,41 @@ export const Form: React.FC<FormPropsFour> = (props: FormPropsFour) => {
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     props.onSubmitFour(email, password, name, userid);
-    //window.location.href = "/dashboard";
   };
 
-
-
   return (
-    <form style={{ display: "flex", flexDirection: "column" }} onSubmit={submit}>
+    <form className="form-container" onSubmit={submit}>
       <label>Email: </label>
       <input
-        type={"email"}
+        type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-      ></input>
+      />
       <label>password: </label>
       <input
-        type={"text"}
-        style={{ marginBottom: 20 }}
+        type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-      ></input>
+      />
       <label>name: </label>
       <input
-        type={"text"}
-        style={{ marginBottom: 20 }}
+        type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
-      ></input>
+      />
       <label>userid: </label>
       <input
-        type={"text"}
-        style={{ marginBottom: 20 }}
+        type="text"
         value={userid}
         onChange={(e) => setUserid(e.target.value)}
-      ></input>
-      
-        <button type={"submit"}>新規登録</button>
-
+      />
+      <button type="submit">新規登録</button>
     </form>
   );
 };
 
+
+// MailLoginForm Component
 export const MailLoginForm: React.FC<FormProps> = (props: FormProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -126,25 +120,24 @@ export const MailLoginForm: React.FC<FormProps> = (props: FormProps) => {
     props.onSubmit(email, password);
   };
 
-
-
   return (
-    <form style={{ display: "flex", flexDirection: "column" }} onSubmit={submit}>
-      <label>Email: </label>
-      <input
-        type={"email"}
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      ></input>
-      <label>password: </label>
-      <input
-        type={"text"}
-        style={{ marginBottom: 20 }}
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      ></input>
-      <button type={"submit"}>ログイン</button>
-    </form>
+    <div className="form-wrapper">
+      <form className="form-container" onSubmit={submit}>
+        <label>Email: </label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <label>Password: </label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button type="submit">ログイン</button>
+      </form>
+    </div>
   );
 };
 

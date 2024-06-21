@@ -9,6 +9,7 @@ import ReplyPage from './ReplyPage';
 import ReplyReplyPage2 from "./ReplyReplyPage2";
 import Status from "./Status";
 import ProtectedRoute from './ProtectedRoute';
+import RedirectIfAuthenticated from './RedirectIfAuthenticated';
 
 interface User {
   id: string;
@@ -17,36 +18,27 @@ interface User {
   userid: string;
 }
 
-
-
-
 const App = () => {
   const [loginUser, setLoginUser] = useState(fireAuth.currentUser);
   const [userUid, setUserUid] = useState<string | null>(null);
   const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
-
+  const [isRegistering, setIsRegistering] = useState(false);
 
   useEffect(() => {
-
-    const unsubscribe = fireAuth.onAuthStateChanged(user => { // !
+    const unsubscribe = fireAuth.onAuthStateChanged(user => {
       if (user) {
-        setUserUid(user.uid); // ログインユーザーのUIDをステートに設定
-        setLoginUser(user); // ここを修正：ログインユーザーの情報をステートに設定
-        console.log("ログインユーザーの情報をステートに設定")
+        setUserUid(user.uid);
+        setLoginUser(user);
+        console.log("ログインユーザーの情報をステートに設定");
       } else {
         setUserUid(null);
-        setLoginUser(null); // ここを修正：ログインユーザーの情報をリセット
+        setLoginUser(null);
       }
     });
 
-
-
-
     return () => unsubscribe();
   }, []);
-
-
 
   const handleFormSubmit = async (email: string, password: string, name: string, userid: string) => {
     try {
@@ -66,7 +58,7 @@ const App = () => {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ id: currentUser.uid, email, userid, name }), // ここを変更：ユーザー情報を送信
+            body: JSON.stringify({ id: currentUser.uid, email, userid, name }),
           });
           if (!postResponse.ok) {
             throw new Error('データの送信に失敗しました');
@@ -94,11 +86,10 @@ const App = () => {
     try {
       await login(email, password);
       console.log("ログイン成功");
-      navigate('/dashboard'); // ログイン成功時にのみページ遷移
+      navigate('/dashboard');
     } catch (error) {
       console.error("ログインエラー:", error);
       alert("ログインに失敗しました。再度お試しください。");
-      // ページ遷移を行わない
     }
   };
 
@@ -111,20 +102,39 @@ const App = () => {
       <Routes>
         <Route path="/" element={
           <>
-            <Form onSubmitFour={handleFormSubmit} />
-            <MailLoginForm onSubmit={handleFormLogin} />
-            {loginUser ? (
-              <div>
-                ログイン中
-                <div>UID: {userUid}</div> {/* UIDを表示 */}
-              </div>
-            ) :
-              <div>
-                ログインできていません
-              </div>}
-            <button onClick={handleSignOut}>
-              ログアウト
-            </button>
+            <RedirectIfAuthenticated>
+              {isRegistering ? (
+                <>
+                  <div className="page-container">
+                    <div className="form-wrapper">
+                      <Form onSubmitFour={handleFormSubmit} />
+                      <button className='center-button' onClick={() => setIsRegistering(false)}>既にアカウントを持っていますか？：<div className='blue-text'>ログインする</div></button>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="page-container">
+                    <div className="form-wrapper">
+                      <MailLoginForm onSubmit={handleFormLogin} />
+                      <button className='center-button' onClick={() => setIsRegistering(true)}>まだアカウントはありませんか？：<div className='blue-text'>新規登録する</div></button>
+                    </div>
+                  </div>
+                </>
+              )}
+              {loginUser ? (
+                <div>
+                  ログイン中
+                  <div>UID: {userUid}</div>
+                </div>
+              ) :
+                <div>
+                  ログインできていません
+                </div>}
+              <button onClick={handleSignOut}>
+                ログアウト
+              </button>
+            </RedirectIfAuthenticated>
           </>
         } />
         <Route
