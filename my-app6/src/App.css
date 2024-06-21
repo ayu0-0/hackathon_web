@@ -19,10 +19,34 @@
   }
 }
 
+.start-header {
+  background-color: orange;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  /* 追加 */
+  align-items: center;
+  justify-content: center;
+  font-size: calc(40px + 2vmin);
+  color: white;
+  position: relative;
+  font-weight: bold;
+}
 
+.header-small-text {
+  font-size: calc(10px + 2vmin);
+}
+
+.header-small-text button {
+  background-color: transparent;
+  font-size: calc(13px + 2vmin);
+  color: white;
+  border: 0px;
+  font-weight: bold;
+}
 
 .App-header {
-  background-color: #282c34;
+  background-color: orange;
   min-height: 10vh;
   display: flex;
   align-items: center;
@@ -88,19 +112,6 @@
 }
 
 
-.status-header {
-  background-color: #282c34;
-  min-height: 10vh;
-  display: flex;
-  font-size: 30px;
-  color: white;
-  position: relative;
-
-}
-.status-header button {
-  position: absolute;
-  right: 10px;
-}
 
 
 .post-button {
@@ -158,8 +169,10 @@
 }
 
 .userName a {
-  color: inherit; /* 親要素の色を継承 */
-  text-decoration: none; /* 下線を取り除く */
+  color: inherit;
+  /* 親要素の色を継承 */
+  text-decoration: none;
+  /* 下線を取り除く */
 }
 
 .userId {
@@ -209,36 +222,41 @@
 }
 
 .commentButton {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    margin-right: 10px;
-   
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  margin-right: 10px;
+
 }
 
 .commentText {
   transform: translateY(-2px);
 }
 
-.commentButton img{
+.commentButton img {
   width: 24px;
   height: 24px;
 }
 
 .commentTextarea {
-  width: 100%; /* テキストエリアの幅を指定 */
-  height: 100px; /* テキストエリアの高さを指定 */
-  resize: none; /* ユーザーがテキストエリアのサイズを変更できないようにする */
+  width: 100%;
+  /* テキストエリアの幅を指定 */
+  height: 100px;
+  /* テキストエリアの高さを指定 */
+  resize: none;
+  /* ユーザーがテキストエリアのサイズを変更できないようにする */
 }
 
 a.postLink {
   text-decoration: none;
-  color: inherit; /* テキストの色を継承する */
+  color: inherit;
+  /* テキストの色を継承する */
 }
 
 a.postLink:hover {
-  text-decoration: none; /* ホバー時も下線を表示しない */
+  text-decoration: none;
+  /* ホバー時も下線を表示しない */
 }
 
 .blue-text {
@@ -249,6 +267,7 @@ a.postLink:hover {
 .black-text {
   color: black;
 }
+
 .page-container {
   display: flex;
   justify-content: center;
@@ -260,35 +279,134 @@ a.postLink:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 0;  /* 修正点: 下部余白を0に設定 */
+  margin-bottom: 0;
+  /* 修正点: 下部余白を0に設定 */
 }
 
 .form-container {
   display: flex;
   flex-direction: column;
-  width: 300px;
+  width: 400px;
   padding: 20px;
   border-radius: 8px;
   background-color: #fff;
-  box-sizing: border-box; /* 追加 */
+  box-sizing: border-box;
+  /* 追加 */
   margin-bottom: 0;
 }
 
 .form-container input {
-  width: 100%; /* 追加 */
-  box-sizing: border-box; /* 追加 */
+  width: 100%;
+  /* 追加 */
+  box-sizing: border-box;
+  /* 追加 */
 }
 
 .form-container label,
 .form-container input,
 .form-container button {
-  margin-bottom: 8px;  /* 必要に応じて調整 */
+  margin-bottom: 8px;
+  /* 必要に応じて調整 */
 }
 
 .center-button {
-  margin-top: 10px;  /* 修正点: トップマージンを小さく設定 */
+  margin-top: 10px;
+  /* 修正点: トップマージンを小さく設定 */
   background-color: transparent;
+  font-size: 18px;
   border: 0px;
+}
+
+.submit-button {
+  margin-top: 10px;
+  background-color: orange;
+  font-size: 18px;
+  color: white;
+  font-weight: bold;
+  border: 0px;
+}
+
+.follow-button {
+  left: 400px;
+  right: 300px;
+  width: 150px;
+  /* 幅を固定 */
+  height: 50px;
+  /* 高さを固定 */
+  position: absolute;
+  left: 500px;
+  
+
+
+ 
+    top: 50%; /* 高さの中央に配置 */
+    transform: translateY(-50%); /* 中央揃えの調整 */
+    padding: 10px 20px; /* ボタンの内側の余白を調整 */
+    background-color: #ffffff; /* ボタンの背景色 */
+    border: 1px solid #ccc; /* ボタンの境界線 */
+    border-radius: 5px; /* 角を丸くする */
+
+}
+
+
+
+.status-header {
+  background-color: orange;
+  min-height: 10vh;
+  display: flex;
+  font-size: 30px;
+  color: white;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-left: 10px;
+
+}
+
+.left-image {
+  margin-right: 10px;
+}
+
+.user-info {
+  flex-grow: 1;
+}
+
+.button-container {
+  display: flex;
+  gap: 10px;
+  /* ボタン間のスペースを設定 */
+  
+}
+
+.logout-button {
+  right: 50px;
+}
+
+.status-user-info {
+  flex-grow: 1;
+  white-space: nowrap;
+  /* これによりテキストの折り返しを防ぎます */
+  overflow: hidden;
+  /* 必要に応じてオーバーフローを隠します */
+  text-overflow: ellipsis;
+  /* 必要に応じてテキストが溢れた場合に省略記号を表示します */
+  display: flex;
+  flex-direction: column;
+  /* これにより、ユーザー名とユーザーIDが上下に表示されます */
+  width: 80%;
+}
+
+.status-user-info div {
+  margin-bottom: 5px;
+  /* 必要に応じて間隔を設定 */
+  white-space: nowrap;
+  /* これによりテキストの折り返しを防ぎます */
+  overflow: hidden;
+  /* 必要に応じてオーバーフローを隠します */
+  text-overflow: ellipsis;
+  /* 必要に応じてテキストが溢れた場合に省略記号を表示します */
 }
 
 

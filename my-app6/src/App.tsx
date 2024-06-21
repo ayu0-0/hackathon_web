@@ -10,6 +10,7 @@ import ReplyReplyPage2 from "./ReplyReplyPage2";
 import Status from "./Status";
 import ProtectedRoute from './ProtectedRoute';
 import RedirectIfAuthenticated from './RedirectIfAuthenticated';
+import Home from './Home';
 
 interface User {
   id: string;
@@ -40,7 +41,7 @@ const App = () => {
     return () => unsubscribe();
   }, []);
 
-  const handleFormSubmit = async (email: string, password: string, name: string, userid: string) => {
+  const handleFormSubmit = async (email: string, password: string, password2: string, name: string, userid: string) => {
     try {
       await register(email, password, name, userid);
       console.log("handleFormSubmit");
@@ -101,14 +102,19 @@ const App = () => {
     <>
       <Routes>
         <Route path="/" element={
+
           <>
+            <header className='start-header'>
+              <div>ようこそ！</div>
+              {/* <div className='header-small-text'>アカウントを持っている人→<a href='/home'>ここ</a></div> */}
+            </header>
             <RedirectIfAuthenticated>
               {isRegistering ? (
                 <>
                   <div className="page-container">
                     <div className="form-wrapper">
-                      <Form onSubmitFour={handleFormSubmit} />
-                      <button className='center-button' onClick={() => setIsRegistering(false)}>既にアカウントを持っていますか？：<div className='blue-text'>ログインする</div></button>
+                      <Form onSubmitFive={handleFormSubmit} />
+                      <button className='center-button' onClick={() => setIsRegistering(false)}>登録したことがありますか？：<div className='blue-text'>ログインする</div></button>
                     </div>
                   </div>
                 </>
@@ -117,26 +123,23 @@ const App = () => {
                   <div className="page-container">
                     <div className="form-wrapper">
                       <MailLoginForm onSubmit={handleFormLogin} />
-                      <button className='center-button' onClick={() => setIsRegistering(true)}>まだアカウントはありませんか？：<div className='blue-text'>新規登録する</div></button>
+                      <button className='center-button' onClick={() => setIsRegistering(true)}>まだアカウントを作っていませんか？：<div className='blue-text'>新規登録する</div></button>
                     </div>
                   </div>
                 </>
               )}
-              {loginUser ? (
-                <div>
-                  ログイン中
-                  <div>UID: {userUid}</div>
-                </div>
-              ) :
-                <div>
-                  ログインできていません
-                </div>}
-              <button onClick={handleSignOut}>
-                ログアウト
-              </button>
+          
             </RedirectIfAuthenticated>
           </>
         } />
+        <Route
+          path="/home"
+          element={
+           
+              <Home signOut={() => fireAuth.signOut()} />
+  
+          }
+        />
         <Route
           path="/dashboard"
           element={

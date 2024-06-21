@@ -2,6 +2,7 @@ import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
 import { fireAuth } from "../firebase";
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import { useState } from "react";
+import '../App.css';
 
 
 
@@ -61,50 +62,89 @@ type FormProps = {
 
 
 type FormPropsFour = {
-  onSubmitFour: (email: string, password: string, name:string, userid:string) => void;
+  onSubmitFour: (email: string, password: string, name: string, userid: string) => void;
+};
+
+type FormPropsFive = {
+  onSubmitFive: (email: string, password: string, password2: string, name: string, userid: string) => void;
 };
 
 
 
 
-export const Form: React.FC<FormPropsFour> = (props: FormPropsFour) => {
+export const Form: React.FC<FormPropsFive> = (props: FormPropsFive) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
   const [name, setName] = useState("");
   const [userid, setUserid] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    props.onSubmitFour(email, password, name, userid);
+
+    if (!password2) {
+      setError("パスワードは2回入力してください");
+      return; // ページ遷移を防ぐ
+    }
+
+    if (!(password===password2)) {
+      setError("パスワードが異なります");
+      return; // ページ遷移を防ぐ
+    }
+
+    const alphanumericRegex = /^[a-zA-Z0-9]+$/;
+    if (!alphanumericRegex.test(userid)) {
+      setError("User IDは英数文字でなければなりません");
+      return; // ページ遷移を防ぐ
+    }
+
+    if (!name || !userid) {
+      setError("NameとUser IDは必須です");
+      return; // ページ遷移を防ぐ
+    }
+  
+    setError(null); // エラーメッセージをクリア
+    props.onSubmitFive(email, password, password2,  name, userid);
   };
+
+  
 
   return (
     <form className="form-container" onSubmit={submit}>
-      <label>Email: </label>
+      {error && <div style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
+      <label>メールアドレスを設定: </label>
       <input
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-      <label>password: </label>
+      <label>パスワードを設定: </label>
       <input
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <label>name: </label>
+      <label>パスワード(もう一度入力してください): </label>
+      <input
+        type="password"
+        value={password2}
+        onChange={(e) => setPassword2(e.target.value)}
+      />
+      <label>表示される名前: </label>
       <input
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
-      <label>userid: </label>
+      <label>ユーザid: </label>
+      <label>(アルファベットと数字で、好きな文字を設定) </label>
       <input
         type="text"
         value={userid}
         onChange={(e) => setUserid(e.target.value)}
       />
-      <button type="submit">新規登録</button>
+      <button type="submit"  className="submit-button">新規登録</button>
     </form>
   );
 };
@@ -123,19 +163,19 @@ export const MailLoginForm: React.FC<FormProps> = (props: FormProps) => {
   return (
     <div className="form-wrapper">
       <form className="form-container" onSubmit={submit}>
-        <label>Email: </label>
+        <label>メールアドレス: </label>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <label>Password: </label>
+        <label>パスワード: </label>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">ログイン</button>
+        <button type="submit" className="submit-button">ログイン</button>
       </form>
     </div>
   );

@@ -402,18 +402,24 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
     };
 
+    const userInfo = getUserName(userId);
+
 
     return (
         <div>
-            <div className="status-header">
-                <a href="/dashboard">
-                    <img src={leftWhiteImage} alt="leftImage" className='left-image'></img>
-                </a>
-                {getUserName(userId).name}
-                <br/>
-                @{getUserName(userId).userid}
-                <button onClick={signOut}>ログアウト</button>
+             <div className="status-header">
+            <a href="/dashboard">
+                <img src={leftWhiteImage} alt="leftImage" className='left-image' />
+            </a>
+            <div className="status-user-info">
+                <div>{userInfo.name}</div>
+                <div>@{userInfo.userid}</div>
             </div>
+            <div className="button-container">
+                <button className='follow-button'>フォロー</button>
+                {/* <button className='logout-button' onClick={signOut}>ログアウト！！</button> */}
+            </div>
+        </div>
             <div>
                 <ul className="list" style={{ listStyleType: 'none', padding: 0 }}>
                     {filteredAndSortedPostsAndReplies.map(item => (
@@ -427,13 +433,13 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                                     <div className="content">
                                         {item.type === 'replyreply2' && (
                                             <div
-                                            className="replyLink"
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                e.stopPropagation(); // クリックイベントの伝播を停止
-                                                window.location.href = `/status/${getPostUserName(item.post_id).user}`;
-                                            }}
-                                        >
+                                                className="replyLink"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation(); // クリックイベントの伝播を停止
+                                                    window.location.href = `/status/${getPostUserName(item.post_id).user}`;
+                                                }}
+                                            >
                                                 <span className="blue-text">@{getUserName(getPostUserName(item.post_id).user).userid}</span>
                                                 <span className="black-text">に返信</span>
                                                 <br />
