@@ -20,7 +20,7 @@
 }
 
 .start-header {
-  background-color: orange;
+  background-color:orange;
   min-height: 10vh;
   display: flex;
   flex-direction: column;
@@ -335,17 +335,30 @@ a.postLink:hover {
   /* 高さを固定 */
   position: absolute;
   left: 500px;
-  
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 10px 20px;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
 
-
- 
-    top: 50%; /* 高さの中央に配置 */
-    transform: translateY(-50%); /* 中央揃えの調整 */
-    padding: 10px 20px; /* ボタンの内側の余白を調整 */
-    background-color: #ffffff; /* ボタンの背景色 */
-    border: 1px solid #ccc; /* ボタンの境界線 */
-    border-radius: 5px; /* 角を丸くする */
-
+.followed-button {
+  left: 400px;
+  right: 300px;
+  width: 150px;
+  /* 幅を固定 */
+  height: 50px;
+  /* 高さを固定 */
+  position: absolute;
+  left: 500px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 10px 20px;
+  background-color: black;
+  color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 
@@ -377,7 +390,7 @@ a.postLink:hover {
   display: flex;
   gap: 10px;
   /* ボタン間のスペースを設定 */
-  
+
 }
 
 .logout-button {
@@ -407,6 +420,14 @@ a.postLink:hover {
   /* 必要に応じてオーバーフローを隠します */
   text-overflow: ellipsis;
   /* 必要に応じてテキストが溢れた場合に省略記号を表示します */
+}
+
+.liked {
+  color: red;
+}
+
+.notLiked {
+  color: black;
 }
 
 

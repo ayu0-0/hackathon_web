@@ -39,6 +39,14 @@ interface Reply {
     replyCount?: number;
 }
 
+interface Follow {
+    id: string;
+    follow_user_id: string;
+    followed_user_id: string;
+    created_at: Date;
+    replyCount?: number;
+}
+
 
 
 const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
@@ -47,6 +55,7 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
     const [posts, setPosts] = useState<Post[]>([]);
     const [replies, setReplies] = useState<Reply[]>([]);
     const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
+    const [followedUsers, setFollowedUsers] = useState<Set<string>>(new Set());
     const [userUid, setUserUid] = useState<string | null>(null);
     const [viewAllPosts, setViewAllPosts] = useState(false);
     const [showCommentForm, setShowCommentForm] = useState<string | null>(null);
@@ -197,6 +206,44 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
             }
         };
 
+        const fetchFollows = async () => {
+            try {
+                const response = await fetch("http://localhost:8080/follows", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+                const data: Follow[] = await response.json();
+
+                const followCountMap: { [key: string]: number } = {};
+
+                // 各likeデータの出現回数をカウント
+                data.forEach((follow) => {
+                    const key = `${follow.follow_user_id}_${follow.followed_user_id}`;
+                    if (!followCountMap[key]) {
+                        followCountMap[key] = 0;
+                    }
+                    followCountMap[key]++;
+                });
+
+                const followedUserIds = new Set<string>();
+                Object.keys(followCountMap).forEach((key) => {
+                    if (followCountMap[key] % 2 === 1) { // 奇数回
+                        const [follow_user_id, followed_user_id] = key.split("_");
+                        if (follow_user_id === userUid) {
+                            followedUserIds.add(followed_user_id);
+                        }
+                    }
+                });
+
+                setFollowedUsers(followedUserIds);
+
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
 
 
 
@@ -206,6 +253,7 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
             fetchLikes();
         }
         fetchReplies();
+        fetchFollows();
 
         return () => unsubscribe();
 
@@ -230,6 +278,21 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
         });
 
         fetchLike(postId);
+    };
+
+
+    const handleFollowClick = (followedId: string) => {
+        setFollowedUsers(prevFollowedUsers => {
+            const newFollowedUsers = new Set(prevFollowedUsers);
+            if (newFollowedUsers.has(followedId)) {
+                newFollowedUsers.delete(followedId);
+            } else {
+                newFollowedUsers.add(followedId);
+            }
+            return newFollowedUsers;
+        });
+
+        fetchFollow(followedId);
     };
 
     const handleCommentClick = (postId: string) => {
@@ -359,6 +422,27 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
         fetchPosts();
     };
 
+
+    const fetchFollow = async (followedId: string) => {
+        try {
+            const postResponse = await fetch("http://localhost:8080/follows", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ follow_user_id: userUid, followed_user_id: followedId }),
+            });
+            if (!postResponse.ok) {
+                throw new Error('データの送信に失敗しました');
+            }
+        } catch (err) {
+            console.error(err);
+            return;
+        }
+
+
+    };
+
     const getUserName = (userId: string) => {
         const user = users.find(user => user.id === userId);
         return user ? { name: user.name, userid: user.userid } : { name: "Unknown User", userid: "" };
@@ -402,24 +486,41 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
     };
 
+    const isFollowedByCurrentUser = (followedId: string) => {
+        if (!userUid) return false;
+        return followedUsers.has(followedId);
+
+    };
+
     const userInfo = getUserName(userId);
 
 
     return (
         <div>
-             <div className="status-header">
-            <a href="/dashboard">
-                <img src={leftWhiteImage} alt="leftImage" className='left-image' />
-            </a>
-            <div className="status-user-info">
-                <div>{userInfo.name}</div>
-                <div>@{userInfo.userid}</div>
+            <div className="status-header">
+                <a href="/dashboard">
+                    <img src={leftWhiteImage} alt="leftImage" className='left-image' />
+                </a>
+                <div className="status-user-info">
+                    <div>{userInfo.name}</div>
+                    <div>@{userInfo.userid}</div>
+                </div>
+                <div className="button-container">
+                    {/* <button className='logout-button' onClick={signOut}>ログアウト！！</button> */}
+                    {userId !== userUid && (
+                        <button
+                            className={`followButton ${isFollowedByCurrentUser(userId) ? 'followed-button' : 'follow-button'}`} // 動的にクラスを変更
+                            onClick={(e) => {
+                                e.preventDefault(); // リンクのデフォルト動作を防止
+                                e.stopPropagation(); // イベントの伝播を停止
+                                handleFollowClick(userId);
+                            }}
+                        >
+                            {isFollowedByCurrentUser(userId) ? 'フォロー済' : 'フォロー'}
+                        </button>
+                    )}
+                </div>
             </div>
-            <div className="button-container">
-                <button className='follow-button'>フォロー</button>
-                {/* <button className='logout-button' onClick={signOut}>ログアウト！！</button> */}
-            </div>
-        </div>
             <div>
                 <ul className="list" style={{ listStyleType: 'none', padding: 0 }}>
                     {filteredAndSortedPostsAndReplies.map(item => (
