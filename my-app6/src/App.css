@@ -20,7 +20,7 @@
 }
 
 .start-header {
-  background-color:orange;
+  background-color: orange;
   min-height: 10vh;
   display: flex;
   flex-direction: column;
@@ -430,6 +430,79 @@ a.postLink:hover {
   color: black;
 }
 
+.App-header-dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: orange;
+  height: 20vh; /* 固定値から変動可能 */
+  min-height: 100px;
+  min-width:300px;
+  justify-content: center;
+  font-size: calc(10px + 2vmin); /* フォントサイズを調整 */
+  color: white;
+  position: fixed; /* ヘッダーを固定 */
+  top: 0;
+  width: 100%;
+  z-index: 1000; /* ヘッダーが他の要素の上に表示されるようにする */
+  padding-bottom: 20px; /* 下にスペースを追加 */
+}
+
+.App-header-dashboard a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.button-container-dashboard {
+  display: flex;
+  gap: 10px; /* ボタン間の隙間を調整 */
+  margin-top: 0px; /* 上のボタンとの隙間を調整 */
+  justify-content: center; /* ボタンを中央に配置 */
+  top: 20px;
+}
+
+.button-container-dashboard button {
+  width: 250px; /* ボタンの幅をさらに広げる */
+  height: 50px; /* ボタンの高さを指定 */
+  font-size: 30px; /* ボタンのフォントサイズを指定 */
+  font-weight: bold; /* ボタンの文字を太文字に */
+  border: 0px;
+  background-color: orange;
+ 
+}
+
+.logout-button {
+  margin-top: 10px; /* 上に余白を追加 */
+}
+
+
+.logout-container-dashboard {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.top-bar {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+  padding-top: 20px;
+}
+
+.selected-button {
+  position: relative;
+}
+
+.selected-button::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;  /* 下線の太さ */
+  background-color: white;  /* 下線の色 */
+}
 
 @keyframes App-logo-spin {
   from {

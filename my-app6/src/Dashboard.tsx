@@ -1,4 +1,4 @@
-import React, { useState, useEffect, MouseEventHandler } from 'react';
+import React, { useState, useEffect, MouseEventHandler, useRef } from 'react';
 import './App.css';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { fireAuth } from './firebaseAuth';
 import likeImage from './images/like.png';
 import likedImage from './images/liked.png';
 import commentImage from './images/comment.png';
+
 
 interface User {
   id: string;
@@ -49,6 +50,18 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
   const [viewAllPosts, setViewAllPosts] = useState(true);
   const [showCommentForm, setShowCommentForm] = useState<string | null>(null);
   const [comment, setComment] = useState("");
+  const headerRef = useRef<HTMLDivElement>(null);
+
+  const adjustContentMargin = () => {
+    const header = headerRef.current;
+    const content = document.getElementById('content');
+    const minMarginTop = 100; // 最小マージンのピクセル値
+    if (header && content) {
+      const headerHeight = header.offsetHeight;
+      const marginTop = Math.max(headerHeight, minMarginTop);
+      content.style.marginTop = `${marginTop}px`;
+    }
+  };
 
   useEffect(() => {
     const unsubscribe = fireAuth.onAuthStateChanged(user => {
@@ -192,6 +205,11 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
       }
     };
 
+    
+    adjustContentMargin();
+    window.addEventListener('resize', adjustContentMargin);
+
+
 
 
 
@@ -202,7 +220,10 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
     }
     fetchReplies();
 
-    return () => unsubscribe();
+    return () => {
+       window.removeEventListener('resize', adjustContentMargin);
+    
+      unsubscribe()};
 
   }, [userUid]);
 
@@ -399,10 +420,17 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
   return (
     <div>
-      <div className="App-header">
-        <button onClick={signOut}>ログアウト</button>
+      <div className="App-header-dashboard"  ref={headerRef}>
+        <div className="top-bar">
+          <button className="logout-button" onClick={signOut}>ログアウト</button>
+        </div>
+        <div className="button-container-dashboard">
+          <button><a href="/followdashboard" >フォロー中</a></button>
+          <button className='selected-button'>全ての投稿</button>
+        </div>
+
       </div>
-      <div>
+      <div id="content" className="dashboard-content">
         <ul className="list" style={{ listStyleType: 'none', padding: 0 }}>
           {filteredAndSortedPostsAndReplies.map(item => (
             <li key={item.id} className="listItem">
@@ -417,16 +445,16 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                   <div className="content">
                     {item.type === 'replyreply2' && (
                       <div
-                      className="replyLink"
-                      onClick={(e) => {
+                        className="replyLink"
+                        onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation(); // クリックイベントの伝播を停止
                           window.location.href = `/status/${getPostUserName(item.post_id).user}`;
-                      }}
-                  >
-                          <span className="blue-text">@{getUserName(getPostUserName(item.post_id).user).userid}</span>
-                          <span className="black-text">に返信</span>
-                          <br />
+                        }}
+                      >
+                        <span className="blue-text">@{getUserName(getPostUserName(item.post_id).user).userid}</span>
+                        <span className="black-text">に返信</span>
+                        <br />
                       </div>
                     )}
                     {item.content}</div>

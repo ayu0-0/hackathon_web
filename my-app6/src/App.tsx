@@ -11,6 +11,7 @@ import Status from "./Status";
 import ProtectedRoute from './ProtectedRoute';
 import RedirectIfAuthenticated from './RedirectIfAuthenticated';
 import Home from './Home';
+import FollowDashboard from './FollowDashboard';
 
 interface User {
   id: string;
@@ -145,6 +146,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <Contents signOut={() => fireAuth.signOut()} />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/followdashboard"
+          element={
+            <ProtectedRoute>
+              <FollowDashboard signOut={() => fireAuth.signOut()} />
             </ProtectedRoute>
           }
         />

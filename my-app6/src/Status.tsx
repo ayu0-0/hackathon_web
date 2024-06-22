@@ -468,7 +468,6 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
     const postsWithType = posts.map(post => ({ ...post, type: 'reply' }));
 
     const repliesWithType = replies
-        .filter(reply => reply.user_id === userUid)
         .map(reply => ({
             ...reply,
             type: 'replyreply2',
