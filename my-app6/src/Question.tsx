@@ -301,7 +301,7 @@ const Question: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                 console.log(users)
                 return;
             } else {
-                alert('このメールアドレスはまだ登録されていませんよね！');
+                alert('このメールアドレスはまだ登録されていません！\n「まだ登録していない方」へ！');
                 console.log("未登録")
                 console.log(users)
                 return;
