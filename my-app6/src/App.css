@@ -1,25 +1,20 @@
 .App {
   text-align: center;
 }
-
-
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
-
 .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
-
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
 }
-
 .start-header {
   background-color: orange;
   min-height: 10vh;
@@ -33,11 +28,9 @@
   position: relative;
   font-weight: bold;
 }
-
 .header-small-text {
   font-size: calc(10px + 2vmin);
 }
-
 .header-small-text button {
   background-color: transparent;
   font-size: calc(13px + 2vmin);
@@ -45,7 +38,6 @@
   border: 0px;
   font-weight: bold;
 }
-
 .App-header {
   background-color: orange;
   min-height: 10vh;
@@ -56,20 +48,16 @@
   color: white;
   position: relative;
 }
-
 .App-header p {
   margin: 0;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
 }
-
-
 .App-header button {
   position: absolute;
   right: 10px;
 }
-
 .App-header .to-friends-posts-button {
   position: absolute;
   left: 20%;
@@ -81,15 +69,12 @@
   background-color: transparent;
   transition: background-color 0.3s, color 0.3s;
 }
-
 .App-header .to-friends-posts-button:hover {
   background-color: white;
   /* ホバー時に背景色を薄くする */
   color: #282c34;
   /* ホバー時にテキストの色を変更 */
 }
-
-
 .App-header .to-my-posts-button {
   position: absolute;
   left: 60%;
@@ -101,32 +86,21 @@
   background-color: transparent;
   transition: background-color 0.3s, color 0.3s;
 }
-
 /* ホバー効果のためのトランジション */
-
-
 .App-header .to-my-posts-button:hover {
   background-color: white;
   /* ホバー時に背景色を薄くする */
   color: #282c34;
   /* ホバー時にテキストの色を変更 */
 }
-
-
-
-
 .post-button {
   position: absolute;
   bottom: 50px;
   right: 10px;
 }
-
-
-
 .App-link {
   color: #61dafb;
 }
-
 .post-button {
   position: fixed;
   bottom: 10px;
@@ -144,7 +118,6 @@
   z-index: 1000;
   /* Ensure it's above other elements */
 }
-
 .back-button {
   position: fixed;
   bottom: 10px;
@@ -162,34 +135,28 @@
   z-index: 1000;
   /* Ensure it's above other elements */
 }
-
 .userName {
   font-size: 1.2em;
   /* フォントサイズを1.5倍に設定 */
   margin-bottom: 8px;
 }
-
 .userName a {
   color: inherit;
   /* 親要素の色を継承 */
   text-decoration: none;
   /* 下線を取り除く */
 }
-
 .userId {
   font-size: 0.8em;
   color: gray;
 }
-
 .content {
   margin-bottom: 8px;
 }
-
 .postedAt {
   font-size: 0.8em;
   margin-bottom: 8px;
 }
-
 .postContainer {
   border: 1px solid #015f34;
   /* 四角のボーダーを設定 */
@@ -200,7 +167,6 @@
   border-radius: 5px;
   /* 角を丸める（任意） */
 }
-
 .likeButton {
   background: none;
   border: none;
@@ -208,38 +174,31 @@
   cursor: pointer;
   margin-right: 10px;
 }
-
 .likeButton img {
   width: 24px;
   /* 画像の幅を24pxに設定 */
   height: 24px;
   /* 画像の高さを24pxに設定 */
 }
-
 .commentContainer {
   display: flex;
   align-items: center;
   color: gray
 }
-
 .commentButton {
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
   margin-right: 10px;
-
 }
-
 .commentText {
   transform: translateY(-2px);
 }
-
 .commentButton img {
   width: 24px;
   height: 24px;
 }
-
 .commentTextarea {
   width: 100%;
   /* テキストエリアの幅を指定 */
@@ -248,34 +207,27 @@
   resize: none;
   /* ユーザーがテキストエリアのサイズを変更できないようにする */
 }
-
 a.postLink {
   text-decoration: none;
   color: inherit;
   /* テキストの色を継承する */
 }
-
 a.postLink:hover {
   text-decoration: none;
   /* ホバー時も下線を表示しない */
 }
-
 .blue-text {
   color: rgb(25, 126, 166);
-
 }
-
 .black-text {
   color: black;
 }
-
 .page-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 }
-
 .form-wrapper {
   display: flex;
   flex-direction: column;
@@ -283,7 +235,6 @@ a.postLink:hover {
   margin-bottom: 0;
   /* 修正点: 下部余白を0に設定 */
 }
-
 .form-container {
   display: flex;
   flex-direction: column;
@@ -295,21 +246,18 @@ a.postLink:hover {
   /* 追加 */
   margin-bottom: 0;
 }
-
 .form-container input {
   width: 100%;
   /* 追加 */
   box-sizing: border-box;
   /* 追加 */
 }
-
 .form-container label,
 .form-container input,
 .form-container button {
   margin-bottom: 8px;
   /* 必要に応じて調整 */
 }
-
 .center-button {
   margin-top: 10px;
   /* 修正点: トップマージンを小さく設定 */
@@ -317,11 +265,9 @@ a.postLink:hover {
   font-size: 18px;
   border: 0px;
 }
-
 .dashboard-content {
   background-color: white;
 }
-
 .submit-button {
   margin-top: 10px;
   background-color: orange;
@@ -330,19 +276,39 @@ a.postLink:hover {
   font-weight: bold;
   border: 0px;
 }
-.follow-button, .followed-button {
+.follow-button {
+  left: 400px;
+  right: 300px;
   width: 150px;
+  /* 幅を固定 */
   height: 50px;
-  position: relative; /* absoluteからrelativeに変更 */
+  /* 高さを固定 */
+  position: absolute;
+  left: 500px;
   top: 50%;
   transform: translateY(-50%);
   padding: 10px 20px;
+  background-color: #ffffff;
   border: 1px solid #ccc;
   border-radius: 5px;
-  margin-left: 10px; /* 左側の余白を設定 */
 }
-
-
+.followed-button {
+  left: 400px;
+  right: 300px;
+  width: 150px;
+  /* 幅を固定 */
+  height: 50px;
+  /* 高さを固定 */
+  position: absolute;
+  left: 500px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 10px 20px;
+  background-color: black;
+  color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
 .status-header {
   background-color: orange;
   min-height: 10vh;
@@ -355,28 +321,21 @@ a.postLink:hover {
   justify-content: space-between;
   width: 100%;
   padding-left: 10px;
-
 }
-
 .left-image {
   margin-right: 10px;
 }
-
 .user-info {
   flex-grow: 1;
 }
-
 .button-container {
   display: flex;
   gap: 10px;
   /* ボタン間のスペースを設定 */
-
 }
-
 .logout-button {
   right: 50px;
 }
-
 .status-user-info {
   flex-grow: 1;
   white-space: nowrap;
@@ -390,7 +349,6 @@ a.postLink:hover {
   /* これにより、ユーザー名とユーザーIDが上下に表示されます */
   width: 80%;
 }
-
 .status-user-info div {
   margin-bottom: 5px;
   /* 必要に応じて間隔を設定 */
@@ -401,15 +359,12 @@ a.postLink:hover {
   text-overflow: ellipsis;
   /* 必要に応じてテキストが溢れた場合に省略記号を表示します */
 }
-
 .liked {
   color: red;
 }
-
 .notLiked {
   color: black;
 }
-
 .App-header-dashboard {
   display: flex;
   flex-direction: column;
@@ -427,12 +382,10 @@ a.postLink:hover {
   z-index: 1000; /* ヘッダーが他の要素の上に表示されるようにする */
   padding-bottom: 20px; /* 下にスペースを追加 */
 }
-
 .App-header-dashboard a {
   text-decoration: none;
   color: inherit;
 }
-
 .button-container-dashboard {
   display: flex;
   gap: 10px; /* ボタン間の隙間を調整 */
@@ -440,7 +393,6 @@ a.postLink:hover {
   justify-content: center; /* ボタンを中央に配置 */
   top: 20px;
 }
-
 .button-container-dashboard button {
   width: 250px; /* ボタンの幅をさらに広げる */
   height: 50px; /* ボタンの高さを指定 */
@@ -450,18 +402,14 @@ a.postLink:hover {
   background-color: orange;
  
 }
-
 .logout-button {
   margin-top: 10px; /* 上に余白を追加 */
 }
-
-
 .logout-container-dashboard {
   position: absolute;
   top: 10px;
   right: 10px;
 }
-
 .top-bar {
   width: 100%;
   display: flex;
@@ -469,11 +417,9 @@ a.postLink:hover {
   padding: 10px;
   padding-top: 20px;
 }
-
 .selected-button {
   position: relative;
 }
-
 .selected-button::after {
   content: '';
   position: absolute;
@@ -483,7 +429,6 @@ a.postLink:hover {
   height: 4px;  /* 下線の太さ */
   background-color: white;  /* 下線の色 */
 }
-
 /* .border-box {
   border: 1px solid black;
   padding: 10px;
@@ -491,12 +436,10 @@ a.postLink:hover {
   background-color: white;
   width: 700px;
   height: 50px; 
-
   font-size: 30px;
   text-align: center;
   line-height: 50px;
 } */
-
 .border-box {
   border: 0px solid black;
   padding: 5px;
@@ -509,32 +452,26 @@ a.postLink:hover {
   background-color: white;
   font-size: 30px;
 }
-
 .down-image-container{
   width: 50px;
   height: 50px;
-
     display: flex;
     justify-content: center;
     margin-top: 10px; /* ボックスと画像の間にスペースを追加 */
   
 }
-
 .down-image-container img{
   width: 50px;
   height: 50px;
 }
-
 .icon {
   margin: 0 100px; /* Add some space between the images */
 }
-
 .three-button-container {
   display: flex;
   justify-content: center;
   margin-top: 10px; /* 画像とボタンの間にスペースを追加 */
 }
-
 .three-button {
   margin: 0 25px; /* ボタン間にスペースを追加 */
   padding: 10px 20px; /* ボタンの内側余白を設定 */
@@ -545,44 +482,15 @@ a.postLink:hover {
   background-color: white;
 }
 
-.pencilImage {
-  width: 150px;
-  height: 150px;
-}
-
 .pencil-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  margin-left: 10px;
-  transform: translateY(-50%);
-  position: relative; /* 位置をabsoluteからrelativeに変更 */
+  width: 200px;
+  height: 100px;
 }
-.pencil-button-container {
-  display: flex;
-  align-items: center; /* 垂直方向のセンタリング */
-  gap: 10px; /* ボタン間のスペース */
-  display: inline-block;
-  position: relative;
-}
-  /* ボタン間のスペースを設定 */
-
-  .pencilForm {
-    position: absolute;
-    top: 40px; /* pencilImageの直下に配置 */
-    left: 0;
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 10px;
-    z-index: 1000;
-}
-
 
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
-
   to {
     transform: rotate(360deg);
   }
