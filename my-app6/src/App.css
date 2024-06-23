@@ -331,17 +331,16 @@ a.postLink:hover {
   border: 0px;
 }
 .follow-button, .followed-button {
-  width: 150px; /* 幅を固定 */
-  height: 50px; /* 高さを固定 */
+  width: 150px;
+  height: 50px;
   position: relative; /* absoluteからrelativeに変更 */
   top: 50%;
   transform: translateY(-50%);
   padding: 10px 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  margin-left: 10px; /* 左側の余白 */
+  margin-left: 10px; /* 左側の余白を設定 */
 }
-
 
 
 .status-header {
@@ -552,12 +551,12 @@ a.postLink:hover {
 }
 
 .pencil-button {
-  background: none; /* 背景なし */
-  border: none; /* ボーダーなし */
-  cursor: pointer; /* マウスホバー時のカーソル */
-  margin-left: 10px; /* 左側の余白 */
-  top: 50%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
   transform: translateY(-50%);
+  position: relative; /* 位置をabsoluteからrelativeに変更 */
 }
 .pencil-button-container {
   display: flex;
