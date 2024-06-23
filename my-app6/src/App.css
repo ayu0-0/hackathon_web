@@ -571,8 +571,8 @@ a.postLink:hover {
 }
 
 .pencilImage {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
 }
 
 .pencil-button {
@@ -580,7 +580,7 @@ a.postLink:hover {
   border: none; /* ボーダーなし */
   cursor: pointer; /* マウスホバー時のカーソル */
   position: absolute;
-  left: 350px;
+  left: 300px;
   top: 50%;
   transform: translateY(-50%);
 }
