@@ -594,12 +594,12 @@ a.postLink:hover {
 
   .pencilForm {
     position: absolute;
-    top: 100%; /* pencilImageの直下に配置 */
-    left: 0; /* pencilImageの左端に合わせる */
+    top: 40px; /* pencilImageの直下に配置 */
+    left: 0;
     background-color: white;
     border: 1px solid #ccc;
     padding: 10px;
-    z-index: 1000; /* フォームが他の要素の上に表示されるようにする */
+    z-index: 1000;
 }
 
 
