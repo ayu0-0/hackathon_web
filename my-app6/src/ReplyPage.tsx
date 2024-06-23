@@ -73,7 +73,7 @@ const ReplyPage = () => {
 
         const fetchUsers = async () => {
             try {
-                const response = await fetch("http://localhost:8080/users", {
+                const response = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/users", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -88,7 +88,7 @@ const ReplyPage = () => {
 
         const fetchPosts = async () => {
             try {
-                const response = await fetch("http://localhost:8080/posts", {
+                const response = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/posts", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -118,7 +118,7 @@ const ReplyPage = () => {
 
         const fetchReplies = async () => {
             try {
-                const response = await fetch("http://localhost:8080/replies", {
+                const response = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/replies", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -147,7 +147,7 @@ const ReplyPage = () => {
 
         const fetchLikes = async () => {
             try {
-                const response = await fetch("http://localhost:8080/likes", {
+                const response = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/likes", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -186,14 +186,18 @@ const ReplyPage = () => {
         fetchPosts(); // この行を追加して、postsデータを取得
         fetchLikes();
         fetchReplies();
+      
 
-        return () => unsubscribe();
+        return () => {
+            unsubscribe();
+           
+        }
 
     }, [userUid, replies]); // repliesを依存関係に追加
 
     const fetchLike = async (postId: string) => {
         try {
-            const postResponse = await fetch("http://localhost:8080/likes", {
+            const postResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/likes", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -252,7 +256,7 @@ const ReplyPage = () => {
 
         const fetchReplies = async () => {
             try {
-                const response = await fetch("http://localhost:8080/replies", {
+                const response = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/replies", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -270,7 +274,7 @@ const ReplyPage = () => {
 
 
             try {
-                const replyResponse = await fetch("http://localhost:8080/replies", {
+                const replyResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/replies", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -287,7 +291,7 @@ const ReplyPage = () => {
             }
 
             try {
-                const getResponse = await fetch("http://localhost:8080/posts");
+                const getResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/posts");
                 if (!getResponse.ok) {
                     throw new Error('データの取得に失敗しました');
                 }
@@ -317,7 +321,7 @@ const ReplyPage = () => {
                 </a>
             </header>
             {/* idに基づいて内容を変更 */}
-            <div>
+            <div className='white-background'>
                 {filteredAndSortedPosts.map(post => {
                     const user = users.find(user => user.id === post.user_id);
                     return (

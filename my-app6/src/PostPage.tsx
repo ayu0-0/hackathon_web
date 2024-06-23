@@ -56,7 +56,7 @@ const PostPage: React.FC = () => {
 
     const fetchData = async () => {
       try {
-        const postResponse = await fetch("http://localhost:8080/posts", {
+        const postResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/posts", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -72,7 +72,7 @@ const PostPage: React.FC = () => {
       }
 
       try {
-        const getResponse = await fetch("http://localhost:8080/posts");
+        const getResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/posts");
         if (!getResponse.ok) {
           throw new Error('データの取得に失敗しました');
         }

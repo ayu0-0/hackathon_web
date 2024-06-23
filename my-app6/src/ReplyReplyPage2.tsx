@@ -73,7 +73,7 @@ const ReplyReplyPage2 = () => {
 
         const fetchUsers = async () => {
             try {
-                const response = await fetch("http://localhost:8080/users", {
+                const response = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/users", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -88,7 +88,7 @@ const ReplyReplyPage2 = () => {
 
         const fetchPosts = async () => {
             try {
-                const response = await fetch("http://localhost:8080/posts", {
+                const response = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/posts", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -118,7 +118,7 @@ const ReplyReplyPage2 = () => {
 
         const fetchReplies = async () => {
             try {
-                const response = await fetch("http://localhost:8080/replies", {
+                const response = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/replies", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -147,7 +147,7 @@ const ReplyReplyPage2 = () => {
 
         const fetchLikes = async () => {
             try {
-                const response = await fetch("http://localhost:8080/likes", {
+                const response = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/likes", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -187,13 +187,17 @@ const ReplyReplyPage2 = () => {
         fetchLikes();
         fetchReplies();
 
-        return () => unsubscribe();
+  
+
+        return () => {unsubscribe();
+      
+        }
 
     }, [userUid, replies]); // repliesを依存関係に追加
 
     const fetchLike = async (postId: string) => {
         try {
-            const postResponse = await fetch("http://localhost:8080/likes", {
+            const postResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/likes", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -275,7 +279,7 @@ const ReplyReplyPage2 = () => {
 
         const fetchReplies = async () => {
             try {
-                const response = await fetch("http://localhost:8080/replies", {
+                const response = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/replies", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -293,7 +297,7 @@ const ReplyReplyPage2 = () => {
 
 
             try {
-                const replyResponse = await fetch("http://localhost:8080/replies", {
+                const replyResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/replies", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -310,7 +314,7 @@ const ReplyReplyPage2 = () => {
             }
 
             try {
-                const getResponse = await fetch("http://localhost:8080/posts");
+                const getResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/posts");
                 if (!getResponse.ok) {
                     throw new Error('データの取得に失敗しました');
                 }
@@ -340,7 +344,7 @@ const ReplyReplyPage2 = () => {
                 </a>
             </header>
             {/* idに基づいて内容を変更 */}
-            <div>
+            <div className='white-background'>
             
                 {filteredAndSortedReplies.map(reply => {
                     const user = users.find(user => user.id === reply.user_id);
@@ -416,7 +420,7 @@ const ReplyReplyPage2 = () => {
 
             </div>
 
-            <div>
+            <div className='white-background'>
                 {filteredAndSortedReplies.map(reply => {
                     const user = users.find(user => user.id === reply.user_id);
                     return (

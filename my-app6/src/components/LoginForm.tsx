@@ -88,14 +88,19 @@ export const Form: React.FC<FormPropsFive> = (props: FormPropsFive) => {
       return; // ページ遷移を防ぐ
     }
 
-    if (!(password===password2)) {
+    if (!(password === password2)) {
       setError("パスワードが異なります");
       return; // ページ遷移を防ぐ
     }
 
-    const alphanumericRegex = /^[a-zA-Z0-9]+$/;
+    const alphanumericRegex = /^[a-zA-Z0-9-_]+$/;
     if (!alphanumericRegex.test(userid)) {
-      setError("User IDは英数文字でなければなりません");
+      setError("User IDは英数文字、-、_でなければなりません");
+      return; // ページ遷移を防ぐ
+    }
+
+    if (userid.length <= 5 || 16 <=userid.length) {
+      setError("User IDは6文字〜15文字にしてください");
       return; // ページ遷移を防ぐ
     }
 
@@ -103,12 +108,12 @@ export const Form: React.FC<FormPropsFive> = (props: FormPropsFive) => {
       setError("NameとUser IDは必須です");
       return; // ページ遷移を防ぐ
     }
-  
+
     setError(null); // エラーメッセージをクリア
-    props.onSubmitFive(email, password, password2,  name, userid);
+    props.onSubmitFive(email, password, password2, name, userid);
   };
 
-  
+
 
   return (
     <form className="form-container" onSubmit={submit}>
@@ -138,13 +143,13 @@ export const Form: React.FC<FormPropsFive> = (props: FormPropsFive) => {
         onChange={(e) => setName(e.target.value)}
       />
       <label>ユーザid: </label>
-      <label>(アルファベットと数字で、好きな文字を設定) </label>
+      <label>(アルファベットと数字で、6文字〜15文字の好きな文字を設定) </label>
       <input
         type="text"
         value={userid}
         onChange={(e) => setUserid(e.target.value)}
       />
-      <button type="submit"  className="submit-button">新規登録</button>
+      <button type="submit" className="submit-button">新規登録</button>
     </form>
   );
 };
@@ -211,6 +216,41 @@ export const PostForm: React.FC<FormPropsOne> = (props: FormPropsOne) => {
         onChange={(e) => setPost(e.target.value)}
       ></input>
       <button type={"submit"}>投稿</button>
+    </form>
+  );
+};
+
+export const Confirm: React.FC<FormPropsOne> = (props: FormPropsOne) => {
+  const [email, setEmail] = useState("");
+  const [password2, setPassword2] = useState("");
+  const [error, setError] = useState<string | null>(null);
+
+  const submit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // if (!password2) {
+    //   setError("パスワードは2回入力してください");
+    //   return; // ページ遷移を防ぐ
+    // }
+
+    
+    setError(null); // エラーメッセージをクリア
+    props.onSubmit(email);
+  };
+
+
+
+  return (
+    <form className="form-container" onSubmit={submit}>
+      {error && <div style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
+      <label>確認したいメールアドレス: </label>
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      
+      <button type="submit" className="submit-button">新規登録</button>
     </form>
   );
 };

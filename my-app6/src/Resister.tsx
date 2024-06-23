@@ -2,12 +2,13 @@ import React, { useState, useEffect, MouseEventHandler } from 'react';
 import './App.css';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { fireAuth } from './firebaseAuth';
+import { Form, MailLoginForm } from './components/LoginForm';
 import likeImage from './images/like.png';
 import likedImage from './images/liked.png';
 import commentImage from './images/comment.png';
-import { useParams } from 'react-router-dom';
-import leftWhiteImage from './images/left-white.png';
+import { fireAuth, register, login, signOutWithMail } from './firebaseAuth';
+import ProtectedRoute from './ProtectedRoute';
+import RedirectIfAuthenticated from './RedirectIfAuthenticated';
 
 interface User {
     id: string;
@@ -39,30 +40,20 @@ interface Reply {
     replyCount?: number;
 }
 
-interface Follow {
-    id: string;
-    follow_user_id: string;
-    followed_user_id: string;
-    created_at: Date;
-    replyCount?: number;
-}
 
 
-
-const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
+const Resister: React.FC<{ signOut: () => void }> = ({ signOut }) => {
     const [loginUser, setLoginUser] = useState(fireAuth.currentUser);
     const [users, setUsers] = useState<User[]>([]);
     const [posts, setPosts] = useState<Post[]>([]);
     const [replies, setReplies] = useState<Reply[]>([]);
     const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
-    const [followedUsers, setFollowedUsers] = useState<Set<string>>(new Set());
     const [userUid, setUserUid] = useState<string | null>(null);
-    const [viewAllPosts, setViewAllPosts] = useState(false);
+    const [viewAllPosts, setViewAllPosts] = useState(true);
     const [showCommentForm, setShowCommentForm] = useState<string | null>(null);
     const [comment, setComment] = useState("");
+    const [isRegistering, setIsRegistering] = useState(true);
 
-    const { id } = useParams();
-    const userId = id || "";
 
     useEffect(() => {
         const unsubscribe = fireAuth.onAuthStateChanged(user => {
@@ -73,6 +64,8 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                 setUserUid(null);
             }
         });
+
+
 
         const fetchUsers = async () => {
             try {
@@ -128,6 +121,8 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                 console.error(err);
             }
         };
+
+
 
         const fetchPosts = async () => {
             try {
@@ -206,44 +201,6 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
             }
         };
 
-        const fetchFollows = async () => {
-            try {
-                const response = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/follows", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                });
-                const data: Follow[] = await response.json();
-
-                const followCountMap: { [key: string]: number } = {};
-
-                // 各likeデータの出現回数をカウント
-                data.forEach((follow) => {
-                    const key = `${follow.follow_user_id}_${follow.followed_user_id}`;
-                    if (!followCountMap[key]) {
-                        followCountMap[key] = 0;
-                    }
-                    followCountMap[key]++;
-                });
-
-                const followedUserIds = new Set<string>();
-                Object.keys(followCountMap).forEach((key) => {
-                    if (followCountMap[key] % 2 === 1) { // 奇数回
-                        const [follow_user_id, followed_user_id] = key.split("_");
-                        if (follow_user_id === userUid) {
-                            followedUserIds.add(followed_user_id);
-                        }
-                    }
-                });
-
-                setFollowedUsers(followedUserIds);
-
-            } catch (err) {
-                console.error(err);
-            }
-        };
-
 
 
 
@@ -253,12 +210,8 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
             fetchLikes();
         }
         fetchReplies();
-        fetchFollows();
 
-
-        return () => {
-            unsubscribe();
-        }
+        return () => unsubscribe();
 
     }, [userUid]);
 
@@ -283,23 +236,69 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
         fetchLike(postId);
     };
 
-
-    const handleFollowClick = (followedId: string) => {
-        setFollowedUsers(prevFollowedUsers => {
-            const newFollowedUsers = new Set(prevFollowedUsers);
-            if (newFollowedUsers.has(followedId)) {
-                newFollowedUsers.delete(followedId);
-            } else {
-                newFollowedUsers.add(followedId);
-            }
-            return newFollowedUsers;
-        });
-
-        fetchFollow(followedId);
-    };
-
     const handleCommentClick = (postId: string) => {
         setShowCommentForm(prevState => (prevState === postId ? null : postId)); // フォーム表示の切り替え
+    };
+
+    const handleFormSubmit = async (email: string, password: string, password2: string, name: string, userid: string) => {
+        try {
+
+            const isUserIdExist = users.some(user => user.userid === userid);
+            if (isUserIdExist) {
+                alert('このユーザーIDは他の人に使用されています。別のユーザーIDを設定してください。');
+                return;
+            }
+
+            await register(email, password, name, userid);
+            console.log("handleFormSubmit");
+
+
+
+            const currentUser = fireAuth.currentUser;
+            if (currentUser) {
+                setUserUid(currentUser.uid);
+                setLoginUser(currentUser);
+
+
+                try {
+                    const postResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/users", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ id: currentUser.uid, email, userid, name }),
+                    });
+                    if (!postResponse.ok) {
+                        throw new Error('データの送信に失敗しました');
+                    }
+                    console.log("POSTしました");
+
+                    const getResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/users");
+                    if (!getResponse.ok) {
+                        throw new Error('データの取得に失敗しました');
+                    }
+                    const getData = await getResponse.json();
+                    setUsers(getData);
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+        } catch (error) {
+            console.error("Error in handleFormSubmit:", error);
+        }
+
+        window.location.href = "/dashboard";
+    };
+
+    const handleFormLogin = async (email: string, password: string) => {
+        try {
+            await login(email, password);
+            console.log("ログイン成功");
+            navigate('/dashboard');
+        } catch (error) {
+            console.error("ログインエラー:", error);
+            alert("ログインに失敗しました。再度お試しください。");
+        }
     };
 
 
@@ -425,27 +424,6 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
         fetchPosts();
     };
 
-
-    const fetchFollow = async (followedId: string) => {
-        try {
-            const postResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/follows", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ follow_user_id: userUid, followed_user_id: followedId }),
-            });
-            if (!postResponse.ok) {
-                throw new Error('データの送信に失敗しました');
-            }
-        } catch (err) {
-            console.error(err);
-            return;
-        }
-
-
-    };
-
     const getUserName = (userId: string) => {
         const user = users.find(user => user.id === userId);
         return user ? { name: user.name, userid: user.userid } : { name: "Unknown User", userid: "" };
@@ -478,7 +456,7 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
         }));
 
     const filteredAndSortedPostsAndReplies = [...postsWithType, ...repliesWithType]
-        .filter(item => viewAllPosts || item.user_id === userId)
+        .filter(item => viewAllPosts || item.user_id === userUid)
         .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
 
@@ -488,126 +466,50 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
     };
 
-    const isFollowedByCurrentUser = (followedId: string) => {
-        if (!userUid) return false;
-        return followedUsers.has(followedId);
-
-    };
-
-    const userInfo = getUserName(userId);
-
 
     return (
         <div>
-            <div className="status-header">
-                <a href="/dashboard">
-                    <img src={leftWhiteImage} alt="leftImage" className='left-image' />
-                </a>
-                <div className="status-user-info">
-                    <div>{userInfo.name}</div>
-                    <div>@{userInfo.userid}</div>
-                </div>
-                <div className="button-container">
-                    {/* <button className='logout-button' onClick={signOut}>ログアウト！！</button> */}
-                    {userId !== userUid && (
-                        <button
-                            className={`followButton ${isFollowedByCurrentUser(userId) ? 'followed-button' : 'follow-button'}`} // 動的にクラスを変更
-                            onClick={(e) => {
-                                e.preventDefault(); // リンクのデフォルト動作を防止
-                                e.stopPropagation(); // イベントの伝播を停止
-                                handleFollowClick(userId);
-                            }}
-                        >
-                            {isFollowedByCurrentUser(userId) ? 'フォロー済' : 'フォロー'}
-                        </button>
-                    )}
-                </div>
-            </div>
-            <div className='white-background' >
-                <ul className="list" style={{ listStyleType: 'none', padding: 0 }}>
-                    {filteredAndSortedPostsAndReplies.map(item => (
-                        <li key={item.id} className="listItem">
-                            <a href={`/${item.type}/${item.id}`} className="postLink">
-                                <div className="postContainer">
-                                    <div className="userName">
-                                        {getUserName(item.user_id).name}
-                                        <span className="userId"> @{getUserName(item.user_id).userid}</span>
-                                    </div>
-                                    <div className="content">
-                                        {item.type === 'replyreply2' && (
-                                            <div
-                                                className="replyLink"
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    e.stopPropagation(); // クリックイベントの伝播を停止
-                                                    window.location.href = `/status/${getPostUserName(item.post_id).user}`;
-                                                }}
-                                            >
-                                                <span className="blue-text">@{getUserName(getPostUserName(item.post_id).user).userid}</span>
-                                                <span className="black-text">に返信</span>
-                                                <br />
-                                            </div>
-                                        )}
-                                        {item.content}</div>
-                                    <div className='postedAt'>{new Date(item.created_at).toLocaleString()}</div>
-                                    <div className="commentContainer">
-                                        <button className="likeButton" onClick={(e) => {
-                                            e.preventDefault(); // リンクのデフォルト動作を防止
-                                            e.stopPropagation(); // イベントの伝播を停止
-                                            handleLikeClick(item.id);
-                                        }}>
-                                            <img
-                                                src={isLikedByCurrentUser(item.id) ? likedImage : likeImage}
-                                                alt="Like"
-                                                className="likeImage"
-                                            />
-                                        </button>
-
-                                        <button className="commentButton" onClick={(e) => {
-                                            e.preventDefault(); // リンクのデフォルト動作を防止
-                                            e.stopPropagation(); // イベントの伝播を停止
-                                            handleCommentClick(item.id);
-                                        }}>
-                                            <img src={commentImage} alt="Comment" className="commentImage" />
-                                        </button>
-                                        <div className="commentText">{item.replyCount}</div>
-                                    </div>
-                                    {showCommentForm === item.id && (
-                                        <form
-                                            onSubmit={(e) => handleCommentSubmit(e, item.id)}
-                                            onClick={(e) => {
-                                                // リンクのデフォルト動作を防止
-                                                e.stopPropagation(); // イベントの伝播を停止
-                                            }}
-                                        >
-                                            <textarea
-                                                className="commentTextarea"
-                                                value={comment}
-                                                onChange={handleCommentChange}
-                                                placeholder="投稿に返信する"
-                                                onClick={(e) => {
-                                                    e.preventDefault(); // リンクのデフォルト動作を防止
-                                                    e.stopPropagation(); // イベントの伝播を停止
-                                                }}
-                                            />
-                                            <button type="submit">
-                                                返信
-                                            </button>
-                                        </form>
-
-                                    )}
-
-
-
+            <>
+                <header className='start-header'>
+                    <div>まだ登録していない人のページです</div>
+                    <div className='header-small-text'>既に登録している方は<a href='/login'>こちら</a></div>
+                    <div className='header-small-text'>わからない方は<a href='/question'>こちら</a></div>
+                </header>
+                <RedirectIfAuthenticated>
+                    {isRegistering ? (
+                        <>
+                            <div className="page-container">
+                                <div className="form-wrapper">
+                                    <Form onSubmitFive={handleFormSubmit} />
                                 </div>
-                            </a>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-            <a href="/post" title="post"><button className='post-button'>投稿</button></a>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div className="page-container">
+                                <div className="form-wrapper">
+                                    <MailLoginForm onSubmit={handleFormLogin} />
+                                    <button className='center-button' onClick={() => setIsRegistering(true)}>まだアカウントを作っていませんか？：<div className='blue-text'>新規登録する</div></button>
+                                </div>
+                            </div>
+                        </>
+                    )}
+                    {/* {loginUser ? (
+                <div>
+                  ログイン中
+                  <div>UID: {userUid}</div>
+                </div>
+              ) :
+                <div>
+                  ログインできていません
+                </div>}
+              <button onClick={handleSignOut}>
+                ログアウト
+              </button> */}
+                </RedirectIfAuthenticated>
+            </>
         </div>
     );
 };
 
-export default Status;
+export default Resister;

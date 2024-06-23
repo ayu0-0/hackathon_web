@@ -88,7 +88,7 @@ const FollowDashboard: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
         const fetchUsers = async () => {
             try {
-                const response = await fetch("http://localhost:8080/users", {
+                const response = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/users", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -104,7 +104,7 @@ const FollowDashboard: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
         const fetchReplies = async () => {
             try {
-                const response = await fetch("http://localhost:8080/replies", {
+                const response = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/replies", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -113,7 +113,7 @@ const FollowDashboard: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                 const data = await response.json();
                 setReplies(data);
 
-                const repliesResponse = await fetch("http://localhost:8080/replies", {
+                const repliesResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/replies", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -143,7 +143,7 @@ const FollowDashboard: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
         const fetchPosts = async () => {
             try {
-                const response = await fetch("http://localhost:8080/posts", {
+                const response = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/posts", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -152,7 +152,7 @@ const FollowDashboard: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                 const data = await response.json();
 
                 // 投稿の返信数を取得
-                const repliesResponse = await fetch("http://localhost:8080/replies", {
+                const repliesResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/replies", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -182,7 +182,7 @@ const FollowDashboard: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
         const fetchLikes = async () => { // likesデータを別途取得
             try {
-                const response = await fetch("http://localhost:8080/likes", {
+                const response = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/likes", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -220,7 +220,7 @@ const FollowDashboard: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
         const fetchFollows = async () => {
             try {
-                const response = await fetch("http://localhost:8080/follows", {
+                const response = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/follows", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -228,14 +228,24 @@ const FollowDashboard: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                 });
                 const data: Follow[] = await response.json();
 
-                const followedUserIds = new Set<string>();
+                const followCountMap: { [key: string]: number } = {};
                 data.forEach(follow => {
                     if (follow.follow_user_id === userUid) {
-                        followedUserIds.add(follow.followed_user_id);
+                        if (!followCountMap[follow.followed_user_id]) {
+                            followCountMap[follow.followed_user_id] = 0;
+                        }
+                        followCountMap[follow.followed_user_id]++;
                     }
                 });
 
-                setFollowedUsers(followedUserIds);
+                const validFollowedUserIds = new Set<string>();
+                Object.keys(followCountMap).forEach(followedUserId => {
+                    if (followCountMap[followedUserId] % 2 === 1) {
+                        validFollowedUserIds.add(followedUserId);
+                    }
+                });
+
+                setFollowedUsers(validFollowedUserIds);
             } catch (err) {
                 console.error(err);
             }
@@ -243,6 +253,7 @@ const FollowDashboard: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
         adjustContentMargin();
         window.addEventListener('resize', adjustContentMargin);
+
 
 
 
@@ -257,6 +268,7 @@ const FollowDashboard: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
         return () => {
             window.removeEventListener('resize', adjustContentMargin);
+    
             unsubscribe()
         };
 
@@ -313,7 +325,7 @@ const FollowDashboard: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
         const fetchData = async () => {
             try {
-                const replyResponse = await fetch("http://localhost:8080/replies", {
+                const replyResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/replies", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -329,7 +341,7 @@ const FollowDashboard: React.FC<{ signOut: () => void }> = ({ signOut }) => {
             }
 
             try {
-                const getResponse = await fetch("http://localhost:8080/posts");
+                const getResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/posts");
                 if (!getResponse.ok) {
                     throw new Error('データの取得に失敗しました');
                 }
@@ -353,7 +365,7 @@ const FollowDashboard: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
     const fetchLike = async (postId: string) => {
         try {
-            const postResponse = await fetch("http://localhost:8080/likes", {
+            const postResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/likes", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -369,7 +381,7 @@ const FollowDashboard: React.FC<{ signOut: () => void }> = ({ signOut }) => {
         }
 
         try {
-            const getResponse = await fetch("http://localhost:8080/posts");
+            const getResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/posts");
             if (!getResponse.ok) {
                 throw new Error('データの取得に失敗しました');
             }
@@ -385,7 +397,7 @@ const FollowDashboard: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
         const fetchPosts = async () => {
             try {
-                const response = await fetch("http://localhost:8080/posts", {
+                const response = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/posts", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -394,7 +406,7 @@ const FollowDashboard: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                 const data = await response.json();
 
                 // 投稿の返信数を取得
-                const repliesResponse = await fetch("http://localhost:8080/replies", {
+                const repliesResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/replies", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -428,7 +440,7 @@ const FollowDashboard: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
     const fetchFollow = async (followedId: string) => {
         try {
-            const postResponse = await fetch("http://localhost:8080/follows", {
+            const postResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/follows", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

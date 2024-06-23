@@ -132,3 +132,7 @@
     /* ボタンの高さを設定 */
     margin-right: 50px;
 }
+
+.white-background {
+    background-color: white;
+}

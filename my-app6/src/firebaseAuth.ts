@@ -53,6 +53,8 @@ export const signOutWithMail = async (navigate: NavigateFunction) => {
   try {
     await signOut(fireAuth);
     alert("ログアウトしました");
+    
+  
     navigate('/');
   } catch (error) {
     if (error instanceof Error) {

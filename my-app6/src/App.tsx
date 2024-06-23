@@ -10,8 +10,11 @@ import ReplyReplyPage2 from "./ReplyReplyPage2";
 import Status from "./Status";
 import ProtectedRoute from './ProtectedRoute';
 import RedirectIfAuthenticated from './RedirectIfAuthenticated';
-import Home from './Home';
+import Login from './Login';
+import Resister from './Resister';
+import Question from './Question';
 import FollowDashboard from './FollowDashboard';
+import downImage from './images/down.png';
 
 interface User {
   id: string;
@@ -39,7 +42,11 @@ const App = () => {
       }
     });
 
-    return () => unsubscribe();
+    document.body.style.backgroundColor = "orange";
+   
+
+    return () => {unsubscribe();
+      document.body.style.backgroundColor = '';}
   }, []);
 
   const handleFormSubmit = async (email: string, password: string, password2: string, name: string, userid: string) => {
@@ -55,7 +62,7 @@ const App = () => {
         console.log(currentUser.uid);
 
         try {
-          const postResponse = await fetch("http://localhost:8080/users", {
+          const postResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/users", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -67,7 +74,7 @@ const App = () => {
           }
           console.log("POSTしました");
 
-          const getResponse = await fetch("http://localhost:8080/users");
+          const getResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/users");
           if (!getResponse.ok) {
             throw new Error('データの取得に失敗しました');
           }
@@ -105,40 +112,52 @@ const App = () => {
         <Route path="/" element={
 
           <>
-            <header className='start-header'>
-              <div>ようこそ！</div>
-              {/* <div className='header-small-text'>アカウントを持っている人→<a href='/home'>ここ</a></div> */}
-            </header>
+
             <RedirectIfAuthenticated>
               {isRegistering ? (
                 <>
-                  <div className="page-container">
-                    <div className="form-wrapper">
-                      <Form onSubmitFive={handleFormSubmit} />
-                      <button className='center-button' onClick={() => setIsRegistering(false)}>登録したことがありますか？：<div className='blue-text'>ログインする</div></button>
-                    </div>
-                  </div>
+                  <MailLoginForm onSubmit={handleFormLogin} />
                 </>
               ) : (
                 <>
-                  <div className="page-container">
-                    <div className="form-wrapper">
-                      <MailLoginForm onSubmit={handleFormLogin} />
-                      <button className='center-button' onClick={() => setIsRegistering(true)}>まだアカウントを作っていませんか？：<div className='blue-text'>新規登録する</div></button>
+                  <div className='start-header'>
+                    <div className=''>ようこそ！</div>
+                    <div className='border-box'>アカウントはお持ちですか？</div>
+                    <div className="down-image-container">
+                      <img src={downImage} alt="down" className="icon" />
+                      <img src={downImage} alt="down" className="icon" />
+                      <img src={downImage} alt="down" className="icon" />
+                    </div>
+                    <div className="three-button-container">
+                    <a href='/login'><button className="three-button">登録済みの方は<br/>こちら</button></a>
+                    <a href='/resister'><button className="three-button">まだ登録<br/>していない方は<br/>こちら</button></a>
+                      <a href='/question'><button className="three-button">わからない方は<br/>こちら</button></a>
                     </div>
                   </div>
                 </>
               )}
-          
+
             </RedirectIfAuthenticated>
           </>
         } />
         <Route
-          path="/home"
+          path="/login"
           element={
-           
-              <Home signOut={() => fireAuth.signOut()} />
-  
+
+            <Login signOut={() => fireAuth.signOut()} />
+
+          }
+        />
+        <Route
+          path="/resister"
+          element={
+            <Resister signOut={() => fireAuth.signOut()} />
+          }
+        />
+        <Route
+          path="/question"
+          element={
+            <Question signOut={() => fireAuth.signOut()} />
           }
         />
         <Route

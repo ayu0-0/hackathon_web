@@ -42,7 +42,7 @@ interface Reply {
 
 
 
-const Home: React.FC<{ signOut: () => void }> = ({ signOut }) => {
+const Login: React.FC<{ signOut: () => void }> = ({ signOut }) => {
   const [loginUser, setLoginUser] = useState(fireAuth.currentUser);
   const [users, setUsers] = useState<User[]>([]);
   const [posts, setPosts] = useState<Post[]>([]);
@@ -69,7 +69,7 @@ const Home: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
     const fetchUsers = async () => {
       try {
-        const response = await fetch("http://localhost:8080/users", {
+        const response = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/users", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -85,7 +85,7 @@ const Home: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
     const fetchReplies = async () => {
       try {
-        const response = await fetch("http://localhost:8080/replies", {
+        const response = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/replies", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -94,7 +94,7 @@ const Home: React.FC<{ signOut: () => void }> = ({ signOut }) => {
         const data = await response.json();
         setReplies(data);
 
-        const repliesResponse = await fetch("http://localhost:8080/replies", {
+        const repliesResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/replies", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -126,7 +126,7 @@ const Home: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
     const fetchPosts = async () => {
       try {
-        const response = await fetch("http://localhost:8080/posts", {
+        const response = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/posts", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -135,7 +135,7 @@ const Home: React.FC<{ signOut: () => void }> = ({ signOut }) => {
         const data = await response.json();
 
         // 投稿の返信数を取得
-        const repliesResponse = await fetch("http://localhost:8080/replies", {
+        const repliesResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/replies", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -165,7 +165,7 @@ const Home: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
     const fetchLikes = async () => { // likesデータを別途取得
       try {
-        const response = await fetch("http://localhost:8080/likes", {
+        const response = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/likes", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -253,7 +253,7 @@ const Home: React.FC<{ signOut: () => void }> = ({ signOut }) => {
         console.log(currentUser.uid);
 
         try {
-          const postResponse = await fetch("http://localhost:8080/users", {
+          const postResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/users", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -265,7 +265,7 @@ const Home: React.FC<{ signOut: () => void }> = ({ signOut }) => {
           }
           console.log("POSTしました");
 
-          const getResponse = await fetch("http://localhost:8080/users");
+          const getResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/users");
           if (!getResponse.ok) {
             throw new Error('データの取得に失敗しました');
           }
@@ -304,7 +304,7 @@ const Home: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
     const fetchData = async () => {
       try {
-        const replyResponse = await fetch("http://localhost:8080/replies", {
+        const replyResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/replies", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -320,7 +320,7 @@ const Home: React.FC<{ signOut: () => void }> = ({ signOut }) => {
       }
 
       try {
-        const getResponse = await fetch("http://localhost:8080/posts");
+        const getResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/posts");
         if (!getResponse.ok) {
           throw new Error('データの取得に失敗しました');
         }
@@ -344,7 +344,7 @@ const Home: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
   const fetchLike = async (postId: string) => {
     try {
-      const postResponse = await fetch("http://localhost:8080/likes", {
+      const postResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/likes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -360,7 +360,7 @@ const Home: React.FC<{ signOut: () => void }> = ({ signOut }) => {
     }
 
     try {
-      const getResponse = await fetch("http://localhost:8080/posts");
+      const getResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/posts");
       if (!getResponse.ok) {
         throw new Error('データの取得に失敗しました');
       }
@@ -376,7 +376,7 @@ const Home: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
     const fetchPosts = async () => {
       try {
-        const response = await fetch("http://localhost:8080/posts", {
+        const response = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/posts", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -385,7 +385,7 @@ const Home: React.FC<{ signOut: () => void }> = ({ signOut }) => {
         const data = await response.json();
 
         // 投稿の返信数を取得
-        const repliesResponse = await fetch("http://localhost:8080/replies", {
+        const repliesResponse = await fetch("https://hackathon-api4-ldnwih7maq-uc.a.run.app/replies", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -463,8 +463,9 @@ const Home: React.FC<{ signOut: () => void }> = ({ signOut }) => {
     <div>
       <>
             <header className='start-header'>
-              <div>ようこそhome</div>
-              <div className='header-small-text'>アカウントを持っている人→<button>ここ</button></div>
+              <div>既に登録している人のページです</div>
+              <div className='header-small-text'>まだ登録していない方は<a href='/resister'>こちら</a></div>
+              <div className='header-small-text'>わからない方は<a href='/question'>こちら</a></div>
             </header>
             <RedirectIfAuthenticated>
               {isRegistering ? (
@@ -481,7 +482,7 @@ const Home: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                   <div className="page-container">
                     <div className="form-wrapper">
                       <MailLoginForm onSubmit={handleFormLogin} />
-                      <button className='center-button' onClick={() => setIsRegistering(true)}>まだアカウントを作っていませんか？：<div className='blue-text'>新規登録する</div></button>
+                      {/* <button className='center-button' onClick={() => setIsRegistering(true)}>まだアカウントを作っていませんか？：<div className='blue-text'>新規登録する</div></button> */}
                     </div>
                   </div>
                 </>
@@ -504,4 +505,4 @@ const Home: React.FC<{ signOut: () => void }> = ({ signOut }) => {
   );
 };
 
-export default Home;
+export default Login;

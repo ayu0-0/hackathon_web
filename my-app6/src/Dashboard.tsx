@@ -209,6 +209,8 @@ const Contents: React.FC<{ signOut: () => void }> = ({ signOut }) => {
     adjustContentMargin();
     window.addEventListener('resize', adjustContentMargin);
 
+  
+
 
 
 
