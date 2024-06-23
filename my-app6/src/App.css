@@ -580,7 +580,7 @@ a.postLink:hover {
   border: none; /* ボーダーなし */
   cursor: pointer; /* マウスホバー時のカーソル */
   position: absolute;
-  left: 300px;
+  left: 200px;
   top: 50%;
   transform: translateY(-50%);
 }
