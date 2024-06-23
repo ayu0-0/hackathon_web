@@ -8,6 +8,7 @@ import likedImage from './images/liked.png';
 import commentImage from './images/comment.png';
 import { useParams } from 'react-router-dom';
 import leftWhiteImage from './images/left-white.png';
+import pencilImage from './images/pencil.png';
 
 interface User {
     id: string;
@@ -521,6 +522,13 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                             {isFollowedByCurrentUser(userId) ? 'フォロー済' : 'フォロー'}
                         </button>
                     )}
+                    <button className="pensilButton" onClick={(e) => {
+                                e.preventDefault(); // リンクのデフォルト動作を防止
+                                e.stopPropagation(); // イベントの伝播を停止
+                                // Pensilボタンの処理をここに追加
+                            }}>
+                                <img src={pencilImage} alt="Pensil" className="pensilImage" />
+                            </button>
                 </div>
             </div>
             <div className='white-background' >
