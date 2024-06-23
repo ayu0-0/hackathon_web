@@ -508,7 +508,7 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                     <div>{userInfo.name}</div>
                     <div>@{userInfo.userid}</div>
                 </div>
-                <div className="button-container">
+                <div className="pencil-button-container">
                     {/* <button className='logout-button' onClick={signOut}>ログアウト！！</button> */}
                     {userId !== userUid && (
                         <button
