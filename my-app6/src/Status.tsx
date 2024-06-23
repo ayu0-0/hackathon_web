@@ -522,7 +522,7 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                             {isFollowedByCurrentUser(userId) ? 'フォロー済' : 'フォロー'}
                         </button>
                     )}
-                    <button className="pensilButton" onClick={(e) => {
+                    <button className="pencil-button" onClick={(e) => {
                                 e.preventDefault(); // リンクのデフォルト動作を防止
                                 e.stopPropagation(); // イベントの伝播を停止
                                 // Pensilボタンの処理をここに追加

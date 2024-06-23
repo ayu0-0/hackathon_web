@@ -570,6 +570,11 @@ a.postLink:hover {
   background-color: white;
 }
 
+.pencil-button {
+  width: 200px;
+  height: 100px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
