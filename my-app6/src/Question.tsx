@@ -296,7 +296,7 @@ const Question: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
             const isUserEmailExist = users.some(user => user.email === email);
             if (isUserEmailExist) {
-                alert('このメールアドレスは登録済みです！');
+                alert('このメールアドレスは登録済みです！\n「既に登録している方」へ！');
                 console.log("登録済み")
                 console.log(users)
                 return;
