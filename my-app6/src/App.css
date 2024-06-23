@@ -589,6 +589,8 @@ a.postLink:hover {
   display: flex;
   align-items: center; /* 垂直方向のセンタリング */
   gap: 10px; /* ボタン間のスペース */
+  display: inline-block;
+  position: relative;
 }
   /* ボタン間のスペースを設定 */
 
