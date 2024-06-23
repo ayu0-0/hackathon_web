@@ -527,7 +527,7 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                         e.stopPropagation(); // イベントの伝播を停止
                         // Pensilボタンの処理をここに追加
                     }}>
-                        <img src={pencilImage} alt="Pensil" className="pensilImage" />
+                        <img src={pencilImage} alt="Pencil" className="pencilImage" />
                     </button>
                 </div>
             </div>
