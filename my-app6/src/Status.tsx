@@ -516,27 +516,19 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                     <div>{userInfo.name}</div>
                     <div>@{userInfo.userid}</div>
                 </div>
-                <div className="pencil-button-container">
+                <div className="button-container">
+                    {/* <button className='logout-button' onClick={signOut}>ログアウト！！</button> */}
                     {userId !== userUid && (
                         <button
-                            className={`followButton ${isFollowedByCurrentUser(userId) ? 'followed-button' : 'follow-button'}`}
+                            className={`followButton ${isFollowedByCurrentUser(userId) ? 'followed-button' : 'follow-button'}`} // 動的にクラスを変更
                             onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
+                                e.preventDefault(); // リンクのデフォルト動作を防止
+                                e.stopPropagation(); // イベントの伝播を停止
                                 handleFollowClick(userId);
                             }}
                         >
                             {isFollowedByCurrentUser(userId) ? 'フォロー済' : 'フォロー'}
                         </button>
-                    )}
-                    <button className="pencil-button" onClick={togglePencilForm}>
-                        <img src={pencilImage} alt="Pencil" className="pencilImage" />
-                    </button>
-                    {showPencilForm && (
-                        <form className="pencilForm">
-                            <textarea placeholder="Enter your text here"></textarea>
-                            <button type="submit">Submit</button>
-                        </form>
                     )}
                 </div>
             </div>
@@ -579,7 +571,6 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                                                 className="likeImage"
                                             />
                                         </button>
-
                                         <button className="commentButton" onClick={(e) => {
                                             e.preventDefault(); // リンクのデフォルト動作を防止
                                             e.stopPropagation(); // イベントの伝播を停止
@@ -611,11 +602,7 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                                                 返信
                                             </button>
                                         </form>
-
                                     )}
-
-
-
                                 </div>
                             </a>
                         </li>
