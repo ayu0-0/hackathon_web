@@ -530,16 +530,17 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                             {isFollowedByCurrentUser(userId) ? 'フォロー済' : 'フォロー'}
                         </button>
                     )}
-                    <button className="pencil-button" onClick={togglePencilForm}>
-                        <img src={pencilImage} alt="Pencil" className="pencilImage" />
-                    </button>
+                   <button className="pencil-button" onClick={togglePencilForm} style={{ position: 'relative' }}>
+                    <img src={pencilImage} alt="Pencil" className="pencilImage" />
+                    {showPencilForm && (
+                        <form className="pencilForm">
+                            <textarea placeholder="Enter your text here"></textarea>
+                            <button type="submit">Submit</button>
+                        </form>
+                    )}
+                </button>
                 </div>
-                {showPencilForm && (
-                    <form className="pencilForm">
-                        <textarea placeholder="Enter your text here"></textarea>
-                        <button type="submit">Submit</button>
-                    </form>
-                )}
+                
             </div>
             <div className='white-background' >
                 <ul className="list" style={{ listStyleType: 'none', padding: 0 }}>
