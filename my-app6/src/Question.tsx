@@ -292,6 +292,7 @@ const Question: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
     const handleFormConfirm = async (email: string) => {
         try {
+            console.log(users)
 
             const isUserEmailExist = users.some(user => user.email === email);
             if (isUserEmailExist) {
