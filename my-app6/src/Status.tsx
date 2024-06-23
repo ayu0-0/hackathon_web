@@ -61,6 +61,8 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
     const [viewAllPosts, setViewAllPosts] = useState(false);
     const [showCommentForm, setShowCommentForm] = useState<string | null>(null);
     const [comment, setComment] = useState("");
+    const [showPencilForm, setShowPencilForm] = useState(false);
+
 
     const { id } = useParams();
     const userId = id || "";
@@ -497,6 +499,12 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
     const userInfo = getUserName(userId);
 
+    const togglePencilForm = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setShowPencilForm(prevState => !prevState);
+    };
+
 
     return (
         <div>
@@ -522,14 +530,16 @@ const Status: React.FC<{ signOut: () => void }> = ({ signOut }) => {
                             {isFollowedByCurrentUser(userId) ? 'フォロー済' : 'フォロー'}
                         </button>
                     )}
-                    <button className="pencil-button" onClick={(e) => {
-                        e.preventDefault(); // リンクのデフォルト動作を防止
-                        e.stopPropagation(); // イベントの伝播を停止
-                        // Pensilボタンの処理をここに追加
-                    }}>
+                    <button className="pencil-button" onClick={togglePencilForm}>
                         <img src={pencilImage} alt="Pencil" className="pencilImage" />
                     </button>
                 </div>
+                {showPencilForm && (
+                    <form className="pencilForm">
+                        <textarea placeholder="Enter your text here"></textarea>
+                        <button type="submit">Submit</button>
+                    </form>
+                )}
             </div>
             <div className='white-background' >
                 <ul className="list" style={{ listStyleType: 'none', padding: 0 }}>
