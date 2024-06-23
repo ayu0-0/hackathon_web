@@ -292,16 +292,18 @@ const Question: React.FC<{ signOut: () => void }> = ({ signOut }) => {
 
     const handleFormConfirm = async (email: string) => {
         try {
-            console.log(users)
+            
 
             const isUserEmailExist = users.some(user => user.email === email);
             if (isUserEmailExist) {
                 alert('このメールアドレスは登録済みです！');
                 console.log("登録済み")
+                console.log(users)
                 return;
             } else {
                 alert('このメールアドレスはまだ登録されていませんよね！');
                 console.log("未登録")
+                console.log(users)
                 return;
             }
             
