@@ -250,7 +250,7 @@ export const Confirm: React.FC<FormPropsOne> = (props: FormPropsOne) => {
         onChange={(e) => setEmail(e.target.value)}
       />
       
-      <button type="submit" className="submit-button">新規登録</button>
+      <button type="submit" className="submit-button">確認する</button>
     </form>
   );
 };

@@ -490,7 +490,7 @@ const Question: React.FC<{ signOut: () => void }> = ({ signOut }) => {
         <div>
             <>
                 <header className='start-header'>
-                    <div>まだ登録しているかわからない人のページです</div>
+                    <div>登録しているかわからない人の<br/>ページです</div>
                     <div className='header-small-text'>既に登録している方は<a href='/login'>こちら</a></div>
                     <div className='header-small-text'>まだ登録していない方は<a href='/resister'>こちら</a></div>
                 </header>

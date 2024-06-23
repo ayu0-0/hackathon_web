@@ -563,10 +563,11 @@ a.postLink:hover {
 .three-button {
   margin: 0 25px; /* ボタン間にスペースを追加 */
   padding: 10px 20px; /* ボタンの内側余白を設定 */
-  font-size: 16px; /* フォントサイズを設定 */
+  font-size: 18px; /* フォントサイズを設定 */
   cursor: pointer; /* カーソルをポインターに変更 */
   width: 200px;
   height: 100px;
+  background-color: white;
 }
 
 @keyframes App-logo-spin {
